@@ -30,9 +30,15 @@ Route::post('/login', function () {
     return redirect()->route('dashboard');
 })->name('login.process');
 
-Route::get('/signup', function () {
-    return view('auth.signup');
-})->name('signup');
+// Route::get('/signup', function () {
+//     return view('auth.signup');
+// })->name('signup');
+
+Route::get('/register', function () {
+    // Pastikan 'auth.signup' sesuai dengan nama file dan folder view kamu.
+    // Misal: resources/views/auth/signup.blade.php
+    return view('auth.signup'); 
+})->name('register.form');
 
 /*
 |--------------------------------------------------------------------------

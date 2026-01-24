@@ -10,12 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .font-jakarta {
             font-family: "Plus Jakarta Sans", sans-serif;
         }
     </style>
-    <title>SIMBA IT</title>
+    <title>@yield('title') | SIMBA IT</title>
 </head>
 
 <body class="font-jakarta bg-gray-50">
