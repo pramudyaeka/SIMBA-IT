@@ -47,7 +47,7 @@ Route::get('/register', function () {
 */
 
 Route::get('/dashboard', function () {
-    return view('staff.dashboard-staff');
+    return view('admin.dashboard-admin');
 })->middleware(AuthMiddleware::class)->name('dashboard');
 
 Route::get('/manage', function () {
