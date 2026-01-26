@@ -6,10 +6,10 @@
         ['item_name' => 'Contoh Item 4', 'category' => 'Kategori C', 'status' => 'Available', 'stock' => 75],
         ['item_name' => 'Contoh Item 5', 'category' => 'Kategori B', 'status' => 'Unavailable', 'stock' => 0],
         ['item_name' => 'Contoh Item 6', 'category' => 'Kategori A', 'status' => 'Available', 'stock' => 120],
-        ['item_name' => 'Contoh Item 7', 'category' => 'Kategori C', 'status' => 'Available', 'stock' => 90],
+        ['item_name' => 'Contoh Item 7', 'category' => 'Kategori C', 'status' => 'Available', 'stock' => 5],
         ['item_name' => 'Contoh Item 8', 'category' => 'Kategori B', 'status' => 'Unavailable', 'stock' => 0],
         ['item_name' => 'Contoh Item 9', 'category' => 'Kategori A', 'status' => 'Available', 'stock' => 300],
-        ['item_name' => 'Contoh Item 10', 'category' => 'Kategori C', 'status' => 'Available', 'stock' => 60],
+        ['item_name' => 'Contoh Item 10', 'category' => 'Kategori C', 'status' => 'Available', 'stock' => 3],
     ];
 @endphp
 
@@ -18,216 +18,257 @@
 @section('title', 'Data Management')
 
 @section('content')
-    <div class="w-full px-6 py-6 space-y-6">
+    <div class="w-full max-w-7xl mx-auto px-6 py-2 space-y-8 font-sans">
+
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Data Management</h1>
+                <p class="text-slate-500 text-sm mt-1">Manage your inventory items efficiently.</p>
+            </div>
+
+            <div class="text-sm text-slate-400 font-medium">
+                {{ now()->format('l, d M Y') }}
+            </div>
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div
-                class="p-6 bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-sm font-medium text-emerald-600">In Stock</p>
-                <div class="flex items-center justify-between mt-4">
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-3xl font-bold text-slate-800">40</span>
-                        <span class="text-sm text-slate-500">Items</span>
+
+            <div id="card-in" onclick="filterTable('in')"
+                class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">In Stock</p>
+                        <div class="flex items-baseline gap-2 mt-2">
+                            <h3 class="text-3xl font-bold text-slate-800">40</h3>
+                            <span
+                                class="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Items</span>
+                        </div>
                     </div>
-                    <div class="p-3 bg-emerald-50 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-emerald-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <div class="p-3 bg-emerald-50 text-emerald-600 rounded-2xl group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                     </div>
                 </div>
+                <p class="text-xs text-emerald-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Click to filter</p>
             </div>
 
-            <div
-                class="p-6 bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-sm font-medium text-amber-500">Need Restock</p>
-                <div class="flex items-center justify-between mt-4">
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-3xl font-bold text-slate-800">7</span>
-                        <span class="text-sm text-slate-500">Items</span>
+            <div id="card-restock" onclick="filterTable('restock')"
+                class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Need Restock</p>
+                        <div class="flex items-baseline gap-2 mt-2">
+                            <h3 class="text-3xl font-bold text-slate-800">2</h3>
+                            <span class="text-sm font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">Items</span>
+                        </div>
                     </div>
-                    <div class="p-3 bg-amber-50 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-amber-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="p-6 bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                <p class="text-sm font-medium text-rose-500">Out of Stock</p>
-                <div class="flex items-center justify-between mt-4">
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-3xl font-bold text-slate-800">2</span>
-                        <span class="text-sm text-slate-500">Items</span>
-                    </div>
-                    <div class="p-3 bg-rose-50 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-rose-500" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <div class="p-3 bg-amber-50 text-amber-600 rounded-2xl group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                     </div>
                 </div>
+                <p class="text-xs text-amber-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Click to filter</p>
+            </div>
+
+            <div id="card-out" onclick="filterTable('out')"
+                class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Out of Stock</p>
+                        <div class="flex items-baseline gap-2 mt-2">
+                            <h3 class="text-3xl font-bold text-slate-800">2</h3>
+                            <span class="text-sm font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">Items</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-rose-50 text-rose-600 rounded-2xl group-hover:scale-110 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-xs text-rose-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click to filter</p>
             </div>
         </div>
 
-        <div>
-            <h1 class="text-2xl font-bold text-slate-800 mb-6">Data Management</h1>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div class="flex gap-3">
-                    <a href="{{ route('crud.addItem') }}"
-                        class="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+            <div class="flex items-center gap-3 h-10">
+                <span id="filter-badge"
+                    class="hidden px-3 py-1.5 rounded-full bg-slate-800 text-white text-xs font-bold items-center gap-2 shadow-sm animate-pulse transition-all">
+                    <span id="filter-text">Filtered</span>
+                    <button onclick="filterTable('reset')" class="hover:text-slate-300 focus:outline-none">
+                        <svg class="size-3" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <div class="relative w-full md:w-64">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput"
+                        class="block w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm placeholder-slate-400"
+                        placeholder="Search item...">
+                </div>
+
+                <div class="flex gap-2">
+                    <button
+                        class="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-indigo-600 text-sm font-semibold rounded-xl shadow-sm transition-all duration-200 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span class="hidden sm:inline">Add Stock</span>
+                    </button>
+
+                    <a href="#"
+                        class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                                 clip-rule="evenodd" />
                         </svg>
                         Add Item
                     </a>
-                    <button
-                        class="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm font-semibold rounded-xl shadow-sm transition-all duration-200 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-500" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Add Stock
-                    </button>
-                </div>
-
-                <div class="relative w-full md:w-72">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                    </div>
-                    <input type="text" id="searchInput"
-                        class="block w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition shadow-sm placeholder-slate-400"
-                        placeholder="Search item or category...">
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table id="dataTable" class="min-w-full">
-                    <thead class="bg-slate-50 border-b border-slate-200">
-                        <tr>
-                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">No
-                            </th>
-
+                <table id="dataTable" class="min-w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="bg-slate-50/80 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-100">
+                            <th class="px-6 py-4 text-center w-16">No</th>
                             <th onclick="sortTable(1)"
-                                class="group px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-left cursor-pointer select-none hover:bg-slate-100 transition">
-                                <div class="flex items-center gap-2">
-                                    Item Name
-                                    <svg id="icon-1" class="w-4 h-4 text-slate-300 transition-transform duration-200"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none">
+                                <div class="flex items-center gap-2">Item Name <svg id="icon-1"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg></div>
                             </th>
-
                             <th onclick="sortTable(2)"
-                                class="group px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-left cursor-pointer select-none hover:bg-slate-100 transition">
-                                <div class="flex items-center gap-2">
-                                    Category
-                                    <svg id="icon-2" class="w-4 h-4 text-slate-300 transition-transform duration-200"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
+                                <div class="flex items-center justify-center gap-2">Category <svg id="icon-2"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg></div>
                             </th>
-
                             <th onclick="sortTable(3)"
-                                class="group px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center cursor-pointer select-none hover:bg-slate-100 transition">
-                                <div class="flex items-center justify-center gap-2">
-                                    Status
-                                    <svg id="icon-3" class="w-4 h-4 text-slate-300 transition-transform duration-200"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
+                                <div class="flex items-center justify-center gap-2">Status <svg id="icon-3"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg></div>
                             </th>
-
                             <th onclick="sortTable(4)"
-                                class="group px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center cursor-pointer select-none hover:bg-slate-100 transition">
-                                <div class="flex items-center justify-center gap-2">
-                                    Stock
-                                    <svg id="icon-4" class="w-4 h-4 text-slate-300 transition-transform duration-200"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
+                                <div class="flex items-center justify-center gap-2">Stock <svg id="icon-4"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg></div>
                             </th>
-
-                            <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">
-                                Action</th>
+                            <th class="px-6 py-4 text-center">Action</th>
                         </tr>
                     </thead>
 
-                    <tbody class="bg-white divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100">
                         @foreach ($collection as $item)
-                            <tr class="hover:bg-slate-50 transition duration-150">
-                                <td class="px-6 py-4 text-sm text-slate-600 text-center font-medium">{{ $loop->iteration }}</td>
+                            <tr class="item-row group hover:bg-indigo-50/30 transition-colors duration-200"
+                                data-stock="{{ $item['stock'] }}">
 
-                                <td class="px-6 py-4 text-sm text-slate-700 font-semibold">{{ $item['item_name'] }}</td>
+                                <td class="px-6 py-4 text-sm text-slate-400 text-center font-medium">{{ $loop->iteration }}</td>
 
-                                <td class="px-6 py-4 text-sm text-slate-600">{{ $item['category'] }}</td>
+                                <td
+                                    class="px-6 py-4 text-sm font-medium text-slate-700 group-hover:text-indigo-700 transition-colors">
+                                    {{ $item['item_name'] }}
+                                </td>
 
                                 <td class="px-6 py-4 text-center">
-                                    @php
-                                        $isAvailable = $item['status'] === 'Available';
-                                        $badgeClass = $isAvailable
-                                            ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                                            : 'bg-rose-100 text-rose-700 border-rose-200';
-                                    @endphp
                                     <span
-                                        class="inline-block w-24 py-1 rounded-full text-xs font-semibold border text-center {{ $badgeClass }}">
-                                        {{ $item['status'] }}
+                                        class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                        {{ $item['category'] }}
                                     </span>
                                 </td>
 
-                                <td class="px-6 py-4 text-sm text-slate-700 text-center font-semibold">{{ $item['stock'] }}
-                                    <span class="text-slate-400 font-normal text-xs">pcs</span>
+                                <td class="px-6 py-4 text-center">
+                                    @php
+                                        // Simple logic for badge color based on stock
+                                        $badgeClass = '';
+                                        $statusText = $item['status'];
+                                        if ($item['stock'] == 0) {
+                                            $badgeClass = 'bg-rose-50 text-rose-700 border-rose-100 ring-rose-500/20';
+                                            $statusText = 'Out of Stock';
+                                        } elseif ($item['stock'] < 10) {
+                                            $badgeClass = 'bg-amber-50 text-amber-700 border-amber-100 ring-amber-500/20';
+                                            $statusText = 'Low Stock';
+                                        } else {
+                                            $badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-100 ring-emerald-500/20';
+                                            $statusText = 'In Stock';
+                                        }
+                                    @endphp
+                                    <span
+                                        class="inline-flex items-center w-28 justify-center py-1 rounded-full text-xs font-semibold border ring-1 ring-inset {{ $badgeClass }}">
+                                        <span class="mr-1.5 size-1.5 rounded-full bg-current"></span>
+                                        {{ $statusText }}
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-4 text-sm text-slate-700 text-center font-bold">
+                                    {{ $item['stock'] }} <span class="text-slate-400 font-normal text-xs ml-0.5">pcs</span>
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
                                         <button
-                                            class="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition"
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100 rounded-lg transition-all shadow-sm"
                                             title="View QR">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                class="size-6">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                                class="size-5">
                                                 <path fill-rule="evenodd"
-                                                    d="M3 4.875C3 3.839 3.84 3 4.875 3h4.5c1.036 0 1.875.84 1.875 1.875v4.5c0 1.036-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 0 1 3 9.375v-4.5ZM4.875 4.5a.375.375 0 0 0-.375.375v4.5c0 .207.168.375.375.375h4.5a.375.375 0 0 0 .375-.375v-4.5a.375.375 0 0 0-.375-.375h-4.5Zm7.875.375c0-1.036.84-1.875 1.875-1.875h4.5C20.16 3 21 3.84 21 4.875v4.5c0 1.036-.84 1.875-1.875 1.875h-4.5a1.875 1.875 0 0 1-1.875-1.875v-4.5Zm1.875-.375a.375.375 0 0 0-.375.375v4.5c0 .207.168.375.375.375h4.5a.375.375 0 0 0 .375-.375v-4.5a.375.375 0 0 0-.375-.375h-4.5ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75A.75.75 0 0 1 6 7.5v-.75Zm9.75 0A.75.75 0 0 1 16.5 6h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75ZM3 14.625c0-1.036.84-1.875 1.875-1.875h4.5c1.036 0 1.875.84 1.875 1.875v4.5c0 1.035-.84 1.875-1.875 1.875h-4.5A1.875 1.875 0 0 1 3 19.125v-4.5Zm1.875-.375a.375.375 0 0 0-.375.375v4.5c0 .207.168.375.375.375h4.5a.375.375 0 0 0 .375-.375v-4.5a.375.375 0 0 0-.375-.375h-4.5Zm7.875-.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75Zm6 0a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75ZM6 16.5a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75Zm9.75 0a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75Zm-3 3a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75Zm6 0a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-.75Z"
+                                                    d="M3.75 2A1.75 1.75 0 0 0 2 3.75v3.5C2 8.216 2.784 9 3.75 9h3.5A1.75 1.75 0 0 0 9 7.25v-3.5A1.75 1.75 0 0 0 7.25 2h-3.5ZM3.5 3.75a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.5a.25.25 0 0 1-.25.25h-3.5a.25.25 0 0 1-.25-.25v-3.5ZM3.75 11A1.75 1.75 0 0 0 2 12.75v3.5c0 .966.784 1.75 1.75 1.75h3.5A1.75 1.75 0 0 0 9 16.25v-3.5A1.75 1.75 0 0 0 7.25 11h-3.5Zm-.25 1.75a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.5a.25.25 0 0 1-.25.25h-3.5a.25.25 0 0 1-.25-.25v-3.5Zm7.5-9c0-.966.784-1.75 1.75-1.75h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 16.25 9h-3.5A1.75 1.75 0 0 1 11 7.25v-3.5Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25h-3.5Zm-7.26 1a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1V5.5a1 1 0 0 0-1-1h-.01Zm9 0a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1V5.5a1 1 0 0 0-1-1h-.01Zm-9 9a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1v-.01a1 1 0 0 0-1-1h-.01Zm9 0a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1v-.01a1 1 0 0 0-1-1h-.01Zm-3.5-1.5a1 1 0 0 1 1-1H12a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1V12Zm6-1a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1H17a1 1 0 0 0 1-1V12a1 1 0 0 0-1-1h-.01Zm-1 6a1 1 0 0 1 1-1H17a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1V17Zm-4-1a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1H12a1 1 0 0 0 1-1V17a1 1 0 0 0-1-1h-.01Z"
                                                     clip-rule="evenodd" />
                                             </svg>
 
                                         </button>
-                                        <button class="p-2 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-lg transition"
+                                        <button
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 rounded-lg transition-all shadow-sm"
                                             title="Edit">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </button>
-                                        <button class="p-2 bg-rose-50 text-rose-600 hover:bg-rose-100 rounded-lg transition"
+                                        <button
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 rounded-lg transition-all shadow-sm"
                                             title="Delete">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -241,131 +282,184 @@
                 </table>
             </div>
 
-            <div id="noDataMessage" class="hidden flex flex-col items-center justify-center py-12 text-center">
-                <div class="p-4 bg-slate-50 rounded-full mb-3">
+            <div id="noDataMessage" class="hidden flex flex-col items-center justify-center py-16 text-center">
+                <div class="p-4 bg-slate-50 rounded-full mb-3 ring-8 ring-slate-50/50">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <h3 class="text-slate-900 font-medium">No items found</h3>
-                <p class="text-slate-500 text-sm mt-1">Try adjusting your search criteria</p>
+                <h3 class="text-slate-900 font-semibold text-lg">No items found</h3>
+                <p class="text-slate-500 text-sm mt-1 max-w-xs mx-auto">Try adjusting your filters or search criteria.</p>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // --- FILTER FUNCTIONALITY ---
+        let currentFilter = 'all';
 
-            // --- 1. SEARCH FUNCTIONALITY ---
+        function filterTable(type) {
+            const rows = document.querySelectorAll('.item-row');
+            const cardIn = document.getElementById('card-in');
+            const cardRestock = document.getElementById('card-restock');
+            const cardOut = document.getElementById('card-out');
+
+            const badge = document.getElementById('filter-badge');
+            const badgeText = document.getElementById('filter-text');
+
+            // Toggle logic: If clicking the same active filter, reset to all
+            if (currentFilter === type && type !== 'reset') {
+                type = 'reset';
+            }
+            currentFilter = type;
+
+            // 1. Reset Styles
+            [cardIn, cardRestock, cardOut].forEach(c => {
+                c.classList.remove('ring-2', 'ring-offset-2', 'ring-emerald-500', 'ring-amber-500', 'ring-rose-500');
+            });
+            badge.classList.add('hidden');
+            badge.classList.remove('flex');
+
+            // 2. Apply Styles & Logic
+            if (type === 'in') {
+                cardIn.classList.add('ring-2', 'ring-emerald-500', 'ring-offset-2');
+                badgeText.innerText = "In Stock";
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else if (type === 'restock') {
+                cardRestock.classList.add('ring-2', 'ring-amber-500', 'ring-offset-2');
+                badgeText.innerText = "Needs Restock";
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            } else if (type === 'out') {
+                cardOut.classList.add('ring-2', 'ring-rose-500', 'ring-offset-2');
+                badgeText.innerText = "Out of Stock";
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            }
+
+            // 3. Filter Rows & Update Numbers
+            let visibleCount = 0;
+            let rowNumber = 1;
+
+            rows.forEach(row => {
+                const stock = parseInt(row.getAttribute('data-stock'));
+                let show = false;
+
+                if (type === 'in') {
+                    if (stock >= 10) show = true;
+                } else if (type === 'restock') {
+                    if (stock > 0 && stock < 10) show = true;
+                } else if (type === 'out') {
+                    if (stock == 0) show = true;
+                } else {
+                    show = true; // Show All
+                }
+
+                if (show) {
+                    row.style.display = '';
+                    row.getElementsByTagName('td')[0].innerText = rowNumber++;
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // 4. Handle Empty State
+            const noDataMsg = document.getElementById('noDataMessage');
+            if (visibleCount === 0) noDataMsg.classList.remove('hidden');
+            else noDataMsg.classList.add('hidden');
+        }
+
+        // --- SEARCH & SORT (Previous Logic Preserved) ---
+        document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('keyup', function () {
                     const filter = this.value.toLowerCase();
-                    const rows = document.querySelectorAll('#dataTable tbody tr');
-                    let hasVisibleRow = false;
+                    const rows = document.querySelectorAll('.item-row');
+                    let visibleCount = 0;
+                    let rowNumber = 1;
 
                     rows.forEach(row => {
-                        // Search in "Item Name" (col 1) and "Category" (col 2)
                         const itemName = row.cells[1].textContent.toLowerCase();
                         const category = row.cells[2].textContent.toLowerCase();
-
                         if (itemName.includes(filter) || category.includes(filter)) {
                             row.style.display = '';
-                            hasVisibleRow = true;
+                            row.getElementsByTagName('td')[0].innerText = rowNumber++;
+                            visibleCount++;
                         } else {
                             row.style.display = 'none';
                         }
                     });
 
-                    // Toggle empty state message
                     const noDataMsg = document.getElementById('noDataMessage');
-                    if (noDataMsg) noDataMsg.classList.toggle('hidden', hasVisibleRow);
-
-                    updateRowNumbers();
+                    if (visibleCount === 0) noDataMsg.classList.remove('hidden');
+                    else noDataMsg.classList.add('hidden');
                 });
             }
         });
 
-        // --- 2. UPDATE ROW NUMBERS ---
-        function updateRowNumbers() {
-            const rows = document.querySelectorAll('#dataTable tbody tr');
-            let counter = 1;
-            rows.forEach(row => {
-                if (row.style.display !== 'none') {
-                    row.cells[0].textContent = counter++;
-                }
-            });
-        }
-
-        // --- 3. SORT FUNCTIONALITY ---
+        // --- SORT FUNCTIONALITY ---
         function sortTable(columnIndex) {
             const table = document.getElementById("dataTable");
             const tbody = table.querySelector('tbody');
             const rows = Array.from(tbody.querySelectorAll('tr'));
 
-            // Determine Sort Direction
-            // Note: Default on first click is 'asc' due to the toggle logic below
             const header = document.querySelectorAll('thead th')[columnIndex];
             const currentDir = header.getAttribute('data-dir') || 'none';
             const newDir = (currentDir === 'none' || currentDir === 'desc') ? 'asc' : 'desc';
 
-            // Update attribute
             header.setAttribute('data-dir', newDir);
             const isAscending = newDir === 'asc';
 
-            // Perform Sort
             rows.sort((rowA, rowB) => {
                 const cellA = rowA.cells[columnIndex].innerText.trim();
                 const cellB = rowB.cells[columnIndex].innerText.trim();
 
-                // Special Handling for "Stock" column (index 4)
-                if (columnIndex === 4) {
+                if (columnIndex === 4) { // Stock column
                     const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, ""));
                     const numB = parseFloat(cellB.replace(/[^0-9.-]+/g, ""));
                     return isAscending ? numA - numB : numB - numA;
                 }
 
-                // Natural Sort for Text
                 return isAscending
                     ? cellA.localeCompare(cellB, undefined, { numeric: true, sensitivity: 'base' })
                     : cellB.localeCompare(cellA, undefined, { numeric: true, sensitivity: 'base' });
             });
 
-            // Re-render rows
             tbody.append(...rows);
+            // Re-run filter logic after sort to ensure numbers and visibility are correct
+            // Note: In a real app, sort should respect the current filter. 
+            // For simplicity here, we re-apply row numbering based on current visibility.
+            let rowNumber = 1;
+            rows.forEach(row => {
+                if (row.style.display !== 'none') {
+                    row.getElementsByTagName('td')[0].innerText = rowNumber++;
+                }
+            });
 
-            // Post-sort cleanups
-            updateRowNumbers();
             updateSortIcons(columnIndex, newDir);
         }
 
-        // --- 4. VISUAL ICONS UPDATE ---
         function updateSortIcons(columnIndex, direction) {
-            // Reset all icons to default state
             document.querySelectorAll('thead th svg').forEach(svg => {
                 svg.classList.remove('text-indigo-600', 'rotate-180');
                 svg.classList.add('text-slate-300');
             });
 
-            // Reset all data-dir attributes except current
             document.querySelectorAll('thead th').forEach((th, idx) => {
                 if (idx !== columnIndex) th.setAttribute('data-dir', 'none');
             });
 
-            // Activate current icon
             const activeIcon = document.getElementById(`icon-${columnIndex}`);
             if (activeIcon) {
                 activeIcon.classList.remove('text-slate-300');
                 activeIcon.classList.add('text-indigo-600');
-
-                // Rotate if Ascending (pointing up)
-                if (direction === 'asc') {
-                    activeIcon.classList.add('rotate-180');
-                } else {
-                    activeIcon.classList.remove('rotate-180');
-                }
+                if (direction === 'asc') activeIcon.classList.add('rotate-180');
+                else activeIcon.classList.remove('rotate-180');
             }
         }
     </script>
