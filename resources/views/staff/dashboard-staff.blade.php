@@ -1,226 +1,253 @@
 @php
-    $collection = [
-        [
-            'item_name' => 'Contoh Item 1',
-            'category' => 'Kategori A',
-            'status' => 'Available',
-            'stock' => 150,
-        ],
-        [
-            'item_name' => 'Contoh Item 2',
-            'category' => 'Kategori B',
-            'status' => 'Unavailable',
-            'stock' => 0,
-        ],
-        [
-            'item_name' => 'Contoh Item 3',
-            'category' => 'Kategori A',
-            'status' => 'Available',
-            'stock' => 200,
-        ],
-        [
-            'item_name' => 'Contoh Item 4',
-            'category' => 'Kategori C',
-            'status' => 'Available',
-            'stock' => 75,
-        ],
-        [
-            'item_name' => 'Contoh Item 5',
-            'category' => 'Kategori B',
-            'status' => 'Unavailable',
-            'stock' => 0,
-        ],
-        [
-            'item_name' => 'Contoh Item 6',
-            'category' => 'Kategori A',
-            'status' => 'Available',
-            'stock' => 120,
-        ],
-        [
-            'item_name' => 'Contoh Item 7',
-            'category' => 'Kategori C',
-            'status' => 'Available',
-            'stock' => 90,
-        ],
-        [
-            'item_name' => 'Contoh Item 8',
-            'category' => 'Kategori B',
-            'status' => 'Unavailable',
-            'stock' => 0,
-        ],
-        [
-            'item_name' => 'Contoh Item 9',
-            'category' => 'Kategori A',
-            'status' => 'Available',
-            'stock' => 300,
-        ],
-        [
-            'item_name' => 'Contoh Item 10',
-            'category' => 'Kategori C',
-            'status' => 'Available',
-            'stock' => 60,
-        ],
-    ];
+    // 1. Definisikan Data
+    $collection = collect([
+        ['item_name' => 'Macbook Pro M2', 'category' => 'Electronics', 'status' => 'Available', 'stock' => 150],
+        ['item_name' => 'Mechanical Keyboard', 'category' => 'Accessories', 'status' => 'Unavailable', 'stock' => 0],
+        ['item_name' => 'Logitech MX Master', 'category' => 'Accessories', 'status' => 'Available', 'stock' => 200],
+        ['item_name' => 'Samsung Monitor 24"', 'category' => 'Electronics', 'status' => 'Available', 'stock' => 75],
+        ['item_name' => 'USB-C Hub', 'category' => 'Accessories', 'status' => 'Unavailable', 'stock' => 0],
+        ['item_name' => 'Ergo Chair', 'category' => 'Furniture', 'status' => 'Available', 'stock' => 12],
+        ['item_name' => 'Standing Desk', 'category' => 'Furniture', 'status' => 'Available', 'stock' => 5],
+        ['item_name' => 'Webcam 4K', 'category' => 'Electronics', 'status' => 'Low Stock', 'stock' => 3],
+        ['item_name' => 'Mousepad XL', 'category' => 'Accessories', 'status' => 'Available', 'stock' => 300],
+        ['item_name' => 'Headset Gaming', 'category' => 'Electronics', 'status' => 'Available', 'stock' => 60],
+    ]);
+
+    // 2. Hitung Statistik Secara Dinamis
+    $totalCategories = $collection->unique('category')->count();
+    $totalItems = $collection->sum('stock');
+    $lowStockCount = $collection->where('stock', '<', 10)->where('stock', '>', 0)->count();
+    $outOfStockCount = $collection->where('stock', 0)->count();
+    $inStockCount = $collection->where('stock', '>', 0)->count();
 @endphp
 
 @extends('layouts.dashboard')
-@section('title','Dashboard')
+@section('title', 'Dashboard Overview')
 
 @section('content')
-    <section class="w-full">
+    <section class="w-full max-w-7xl mx-auto p-6 space-y-8 font-sans">
 
-        <!-- Statistik Dashboard -->
-        <div class="w-full grid grid-cols-3 gap-6 py-4 px-8">
-
-            <!-- Scan QR Code -->
-            <div class="group cursor-pointer rounded-xl
-            bg-linear-to-br from-sky-400 to-blue-500
-            p-4 text-white shadow-md
-            hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-
-                <p class="font-semibold mb-2">Scan QR Code</p>
-
-                <div class="flex flex-col items-center justify-center gap-2">
-                    <img src="{{ asset('images/QR Code.png') }}" alt="QR Code"
-                        class="w-36 brightness-0 invert opacity-90 group-hover:scale-105 transition">
-
-                    <span class="text-xs text-white/90">
-                        Scan untuk melihat detail barang
-                    </span>
-                </div>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Inventory Overview</h1>
+                <p class="text-slate-500 text-sm">Monitor stok barang dan performa gudang Anda.</p>
             </div>
-
-            <!-- Statistik Kategori -->
-            <div class="flex flex-col gap-4">
-
-                <!-- Total Category -->
-                <div class="p-4 rounded-xl h-32
-                bg-linear-to-br from-violet-400 to-purple-600
-                text-white shadow-md
-                hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-
-                    <p class="text-sm text-white/90">Total Category</p>
-
-                    <div class="flex items-center mt-3">
-                        <p class="font-semibold text-3xl">3</p>
-                        <p class="ml-3 text-sm font-medium">Categories</p>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-12 ml-auto text-white/80">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6h16.5M3.75 12h16.5M3.75 18h16.5" />
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Need Restock -->
-                <div class="p-4 rounded-xl h-32
-                bg-linear-to-br from-amber-400 to-orange-500
-                text-white shadow-md
-                hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-
-                    <p class="text-sm text-white/90">Need Restock</p>
-
-                    <div class="flex items-center mt-3">
-                        <p class="font-semibold text-3xl">7</p>
-                        <p class="ml-3 text-sm font-medium">Items</p>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-12 ml-auto text-white/90"
-                            viewBox="0 -960 960 960" fill="currentColor">
-                            <path
-                                d="M480-580q-17 0-28.5-11.5T440-620q0-17 11.5-28.5T480-660q17 0 28.5 11.5T520-620q0 17-11.5 28.5T480-580Zm-40-140v-200h80v200h-80ZM280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM40-800v-80h131l170 360h280l156-280h91L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68.5-39t-1.5-79l54-98-144-304H40Z" />
-                        </svg>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Statistik Stok -->
-            <div class="flex flex-col gap-4">
-
-                <!-- In Stock -->
-                <div class="p-4 rounded-xl h-32
-                bg-linear-to-br from-emerald-400 to-green-600
-                text-white shadow-md
-                hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-
-                    <p class="text-sm text-white/90">In Stock</p>
-
-                    <div class="flex items-center mt-3">
-                        <p class="font-semibold text-3xl">40</p>
-                        <p class="ml-3 text-sm font-medium">Items</p>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto size-12 text-white/90"
-                            viewBox="0 -960 960 960" fill="currentColor">
-                            <path
-                                d="M200-80q-33 0-56.5-23.5T120-160v-451q-18-11-29-28.5T80-680v-120q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v120q0 23-11 40.5T840-611v451q0 33-23.5 56.5T760-80H200Zm0-520v440h560v-440H200Zm-40-80h640v-120H160v120Zm200 280h240v-80H360v80Z" />
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Out of Stock -->
-                <div class="p-4 rounded-xl h-32
-                bg-linear-to-br from-rose-400 to-red-600
-                text-white shadow-md
-                hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-
-                    <p class="text-sm text-white/90">Out of Stock</p>
-
-                    <div class="flex items-center mt-3">
-                        <p class="font-semibold text-3xl">2</p>
-                        <p class="ml-3 text-sm font-medium">Items</p>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto size-12 text-white/90"
-                            viewBox="0 -960 960 960" fill="currentColor">
-                            <path
-                                d="M440-400v-360h80v360h-80Zm0 200v-80h80v80h-80ZM240-40H120q-33 0-56.5-23.5T40-120v-120h80v120h120v80Zm480 0v-80h120v-120h80v120q0 33-23.5 56.5T840-40H720ZM40-720v-120q0-33 23.5-56.5T120-920h120v80H120v120H40Zm800 0v-120H720v-80h120q33 0 56.5 23.5T920-840v120h-80Z" />
-                        </svg>
-                    </div>
-                </div>
-
-            </div>
+            {{-- <button
+                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                        clip-rule="evenodd" />
+                </svg>
+                Tambah Barang
+            </button> --}}
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-        <!-- Item Summary -->
-        <div class="w-full px-8">
-            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <p class="text-base font-semibold mb-4 text-slate-700">Item Summary</p>
+            <div
+                class="group relative overflow-hidden rounded-3xl bg-linear-to-br from-indigo-600 to-violet-600 p-6 text-white shadow-lg shadow-indigo-200 transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer md:col-span-2 xl:col-span-1">
+                <div class="relative z-10 flex flex-col h-full justify-between">
+                    <div>
+                        <div class="mb-3 inline-flex rounded-xl bg-white/20 p-2 backdrop-blur-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6 text-white">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold">Scan QR Code</h3>
+                        <p class="text-sm text-indigo-100 mt-1">Cek detail barang instan</p>
+                    </div>
+                    <div
+                        class="mt-4 flex items-center gap-3 text-xs font-medium text-indigo-100 bg-white/10 p-3 rounded-xl border border-white/10">
+                        <div class="size-8 bg-white rounded flex items-center justify-center text-indigo-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6 text-indigo-600">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                            </svg>
+                        </div>
+                        <span>Klik untuk membuka kamera</span>
+                    </div>
+                </div>
+                <div
+                    class="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-white/10 blur-2xl transition-all group-hover:bg-white/20">
+                </div>
+            </div>
 
-                <div class="overflow-x-auto rounded-lg bg-white">
-                    <table class="min-w-full">
-                        <thead class="bg-slate-100">
-                            <tr>
-                                <th class="px-4 py-2 text-sm font-semibold text-slate-600 text-center">No</th>
-                                <th class="px-4 py-2 text-sm font-semibold text-slate-600 text-center">Item Name</th>
-                                <th class="px-4 py-2 text-sm font-semibold text-slate-600 text-center">Category</th>
-                                <th class="px-4 py-2 text-sm font-semibold text-slate-600 text-center">Status</th>
-                                <th class="px-4 py-2 text-sm font-semibold text-slate-600 text-center">Stock</th>
+            <div
+                class="rounded-3xl bg-white p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Total Kategori</p>
+                        <h3 class="mt-2 text-3xl font-bold text-slate-800">{{ $totalCategories }}</h3>
+                    </div>
+                    <div class="rounded-full bg-purple-50 p-3 text-purple-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center text-xs font-medium text-slate-400">
+                    <span class="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded mr-2 flex items-center">
+                        Active
+                    </span>
+                    Updated today
+                </div>
+            </div>
+
+            <div
+                class="rounded-3xl bg-white p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Perlu Restock</p>
+                        <h3 class="mt-2 text-3xl font-bold text-slate-800">{{ $lowStockCount + $outOfStockCount }}</h3>
+                    </div>
+                    <div class="rounded-full bg-orange-50 p-3 text-orange-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-4 w-full bg-slate-100 rounded-full h-1.5">
+                    <div class="bg-orange-500 h-1.5 rounded-full"
+                        style="width: {{ ($totalItems > 0) ? (($lowStockCount + $outOfStockCount) / count($collection)) * 100 : 0 }}%">
+                    </div>
+                </div>
+                <p class="mt-2 text-xs text-slate-400">{{ $outOfStockCount }} barang kosong</p>
+            </div>
+
+            <div
+                class="rounded-3xl bg-white p-6 shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Total Unit</p>
+                        <h3 class="mt-2 text-3xl font-bold text-slate-800">{{ $totalItems }}</h3>
+                    </div>
+                    <div class="rounded-full bg-emerald-50 p-3 text-emerald-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs text-slate-500">
+                    <span>Available: <b class="text-slate-700">{{ $inStockCount }}</b> items</span>
+                    <span>Value: <b class="text-slate-700">High</b></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="rounded-3xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h2 class="text-lg font-bold text-slate-800">Daftar Barang</h2>
+                <div class="relative">
+                    <input type="text" placeholder="Cari barang..."
+                        class="pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 w-48 md:w-64 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="size-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="bg-slate-50/80 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-100">
+                            <th class="px-6 py-4 text-center w-16">#</th>
+                            <th class="px-6 py-4">Item Name</th>
+                            <th class="px-6 py-4 text-center">Category</th>
+                            <th class="px-6 py-4 text-center">Stock</th>
+                            <th class="px-6 py-4 text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        @forelse ($collection as $item)
+                            <tr class="group hover:bg-indigo-50/30 transition-colors duration-200">
+                                <td class="px-6 py-4 text-center text-slate-400 font-medium">
+                                    {{ $loop->iteration }}
+                                </td>
+
+                                <td class="px-6 py-4 font-medium text-slate-700 group-hover:text-indigo-600 transition-colors">
+                                    {{ $item['item_name'] }}
+                                </td>
+
+                                <td class="px-6 py-4 text-slate-500 text-center">
+                                    <span
+                                        class="inline-flex w-24 justify-center items-center gap-1.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200 whitespace-nowrap">
+                                        {{ $item['category'] }}
+                                    </span>
+                                </td>
+
+                                <td class="px-6 py-4 text-center font-semibold text-slate-700">
+                                    {{ $item['stock'] }}
+                                </td>
+
+                                <td class="px-6 py-4 text-center">
+                                    @php
+                                        $statusClass = match (true) {
+                                            $item['stock'] == 0 => 'bg-rose-50 text-rose-600 border-rose-100 ring-rose-500/10',
+                                            $item['stock'] < 10 => 'bg-orange-50 text-orange-600 border-orange-100 ring-orange-500/10',
+                                            default => 'bg-emerald-50 text-emerald-600 border-emerald-100 ring-emerald-500/10'
+                                        };
+                                        $statusLabel = ($item['stock'] == 0) ? 'Out of Stock' : (($item['stock'] < 10) ? 'Low Stock' : 'In Stock');
+                                    @endphp
+
+                                    <span
+                                        class="inline-flex w-28 justify-center items-center py-1 rounded-full text-xs font-semibold border ring-1 ring-inset {{ $statusClass }} whitespace-nowrap">
+                                        <span class="mr-1.5 size-1.5 rounded-full bg-current"></span>
+                                        {{ $statusLabel }}
+                                    </span>
+                                </td>
                             </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($collection as $item)
-                                                <tr class=" odd:bg-white even:bg-slate-50 hover:bg-slate-50 transition">
-                                                    <td class="px-4 py-2 text-sm text-center text-slate-600">{{ $loop->iteration }}</td>
-                                                    <td class="px-4 py-2 text-sm text-center text-slate-700">{{ $item['item_name'] }}</td>
-                                                    <td class="px-4 py-2 text-sm text-center text-slate-600">{{ $item['category'] }}</td>
-                                                    <td class="px-4 py-2 text-sm text-center">
-                                                        <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                                                {{ $item['status'] === 'Available'
-                                ? 'bg-emerald-100 text-emerald-700'
-                                : 'bg-rose-100 text-rose-700' }}">
-                                                            {{ $item['status'] }}
-                                                        </span>
-                                                    </td>
-                                                    <td class="px-4 py-2 text-sm text-center text-slate-700">
-                                                        {{ $item['stock'] }} pcs
-                                                    </td>
-                                                </tr>
-                            @endforeach
-                        </tbody>
-
-                    </table>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-6 py-10 text-center text-slate-500">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="size-12 text-slate-300 mb-3" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                        </svg>
+                                        <p>Belum ada data barang.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <span class="text-xs text-slate-500">Menampilkan 1-{{ count($collection) }} dari {{ count($collection) }}
+                    data</span>
+                <div class="flex gap-1">
+                    <button class="p-1 rounded hover:bg-white hover:shadow-sm disabled:opacity-50 text-slate-500" disabled>
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button class="p-1 rounded hover:bg-white hover:shadow-sm text-slate-500">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
