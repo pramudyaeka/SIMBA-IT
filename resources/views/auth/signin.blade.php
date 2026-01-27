@@ -7,7 +7,7 @@
 
 <section class="min-h-screen flex items-center justify-center bg-slate-50 p-4 sm:p-6 lg:p-8 font-jakarta">
     
-    <div class="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-5 min-h-[600px]">
+    <div class="w-full max-w-6xl bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-5 min-h-150">
 
         <div class="hidden lg:flex lg:col-span-2 relative bg-indigo-600 flex-col justify-between p-12 text-white overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-full">
