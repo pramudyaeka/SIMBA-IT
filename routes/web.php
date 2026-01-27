@@ -50,9 +50,9 @@ Route::get('/dashboard', function () {
     return view('admin.dashboard-admin');
 })->middleware(AuthMiddleware::class)->name('dashboard');
 
-Route::get('/manage', function () {
-    return view('admin.dataManage');
-})->name('data.manage');
+Route::get('/items', function () {
+    return view('admin.crud.item.itemsManage');
+})->name('items.manage');
 
 Route::get('/manage/crud/add-item', function () {
     return view('admin.crud.item.addItem');
@@ -61,6 +61,22 @@ Route::get('/manage/crud/add-item', function () {
 Route::get('/manage/crud/add-category', function () {
     return view('admin.crud.category.addCategory');
 })->name('crud.addCategory');
+
+Route::get('/categories', function () {
+    return view('admin.crud.category.categoriesManage');
+})->name('categories.manage');
+
+Route::get('/reports', function () {
+    return view('admin.reports');
+})->name('reports.page');
+
+Route::get('/history', function () {
+    return view('admin.history');
+})->name('history.page');
+
+Route::get('/accountManagement', function () {
+    return view('admin.accountManagement');
+})->name('accountManagement.page');
 
 Route::post('/register', [RegisterController::class, 'store']);
 
