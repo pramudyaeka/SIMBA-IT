@@ -1,69 +1,68 @@
-<header class="font-jakarta bg-white border-b border-gray-200 relative z-30">
-    {{-- Wrapper navbar --}}
-    <div class="flex items-center justify-between py-4 px-8">
+<header class="font-jakarta bg-white border-b border-slate-200 sticky top-0 z-30 w-full">
+    
+    <div class="flex items-center justify-between py-3 px-6 lg:px-8">
 
         <div class="flex items-center gap-4">
-            <button onclick=""
-                class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:scale-95 transition">
-                ☰
+            <button onclick="toggleSidebar()" 
+                class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 active:scale-95 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
             </button>
 
-            <p class="text-xl font-semibold text-gray-800">
-                Halo, {{ Auth::user()->first_name ?? 'User' }}!
-            </p>
+            <h1 class="text-xl font-bold text-slate-800 tracking-tight">
+                @yield('title', 'Dashboard') </h1>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-4">
 
-            <button class="p-2 rounded-lg hover:bg-gray-100 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-5 text-gray-600">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+            <button class="relative p-2 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition">
+                <span class="absolute top-2 right-2.5 size-2 bg-rose-500 rounded-full border border-white"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                 </svg>
             </button>
 
-            <button class="p-2 rounded-lg hover:bg-gray-100 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-5 text-gray-600">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-                </svg>
-            </button>
-
-            <div class="w-px h-6 bg-gray-200 mx-2"></div>
+            <div class="w-px h-8 bg-slate-100 hidden sm:block"></div>
 
             <div class="relative" id="userMenuContainer">
-                <button onclick="toggleUserMenu()"
-                    class="flex items-center gap-3 cursor-pointer hover:bg-gray-50 px-3 py-2 rounded-lg transition text-left">
+                <button onclick="toggleUserMenu()" class="flex items-center gap-3 pl-2 pr-1 py-1 rounded-full hover:bg-slate-50 transition text-left group">
                     
-                    <div class="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                        </svg>
+                    <div class="hidden sm:block text-right leading-tight mr-1">
+                        <p class="text-sm font-bold text-slate-700 group-hover:text-indigo-600 transition-colors">
+                            {{ Auth::user()->first_name ?? 'User' }}
+                        </p>
+                        <p class="text-[11px] text-slate-400">
+                            Staff IT
+                        </p>
                     </div>
 
-                    <div class="flex flex-col leading-tight">
-                        <p class="text-sm font-semibold text-gray-800">
-                            {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
-                        </p>
-                        <p class="text-xs text-gray-500">
-                            Staff IT </p>
+                    <div class="size-9 bg-linear-to-br from-indigo-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-white">
+                        {{ substr(Auth::user()->first_name ?? 'U', 0, 1) }}
                     </div>
                     
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-400 ml-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4 text-slate-400 group-hover:text-slate-600 transition-colors hidden sm:block">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                     </svg>
                 </button>
 
-                <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Settings</a>
-                    <div class="border-t border-gray-100 my-1"></div>
+                <div id="userDropdown" class="hidden absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-1.5 z-50 transform origin-top-right transition-all">
                     
-                    <button id="logoutBtn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
+                    <div class="px-4 py-3 border-b border-slate-50 sm:hidden">
+                        <p class="text-sm font-bold text-slate-800">{{ Auth::user()->first_name ?? 'User' }}</p>
+                        <p class="text-xs text-slate-500">Staff IT</p>
+                    </div>
+
+                    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-indigo-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        Profile
+                    </a>
+                    
+                    <div class="border-t border-slate-100 my-1"></div>
+                    
+                    <button id="logoutBtn" class="w-full text-left px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                         </svg>
@@ -81,13 +80,11 @@
 </form>
 
 <script>
-    // 1. Toggle Dropdown Menu
     function toggleUserMenu() {
         const menu = document.getElementById('userDropdown');
         menu.classList.toggle('hidden');
     }
 
-    // Close dropdown jika klik di luar area
     document.addEventListener('click', function(event) {
         const container = document.getElementById('userMenuContainer');
         const menu = document.getElementById('userDropdown');
@@ -96,22 +93,20 @@
         }
     });
 
-    // 2. SweetAlert Logout Confirmation
     document.getElementById('logoutBtn').addEventListener('click', function(e) {
         e.preventDefault();
-        
-        // Tutup dropdown dulu biar rapi
         document.getElementById('userDropdown').classList.add('hidden');
 
         Swal.fire({
             title: 'Logout?',
-            text: "Apakah Anda yakin ingin keluar?",
+            text: "Are you sure you want to end your session?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#4F46E5', // Indigo-600
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Logout',
-            cancelButtonText: 'Batal'
+            cancelButtonColor: '#E11D48', // Rose-600
+            confirmButtonText: 'Yes, Logout',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('logoutForm').submit();

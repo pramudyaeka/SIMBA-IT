@@ -25,7 +25,7 @@
 @section('title', 'Monthly Report')
 
 @section('content')
-    <div class="w-full max-w-7xl mx-auto px-6 py-6 space-y-8 font-sans">
+    <div class="w-full max-w-7xl mx-auto px-6 py-6 space-y-8 font-jakarta">
 
         <div class="flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
             <div>
@@ -189,7 +189,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 
     <script>

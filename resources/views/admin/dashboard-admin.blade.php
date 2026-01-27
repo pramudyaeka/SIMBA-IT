@@ -25,7 +25,7 @@
 @section('title', 'Dashboard Overview')
 
 @section('content')
-    <section class="w-full max-w-7xl mx-auto p-6 py-2 space-y-8 font-sans">
+    <section class="w-full max-w-7xl mx-auto p-6 py-2 space-y-8 font-jakarta">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-bold text-slate-800">Inventory Overview</h1>
