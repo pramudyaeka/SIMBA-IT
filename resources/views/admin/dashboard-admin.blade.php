@@ -22,7 +22,7 @@
 @endphp
 
 @extends('layouts.dashboard')
-@section('title', 'Dashboard Overview')
+@section('title', 'Dashboard')
 
 @section('content')
     <section class="w-full max-w-7xl mx-auto p-6 py-2 space-y-8 font-jakarta">

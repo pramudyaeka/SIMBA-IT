@@ -83,10 +83,9 @@
                     <div class="relative">
                         <select name="role" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer text-slate-700">
                             <option value="" disabled selected>Select your role...</option>
-                            <option value="Staff">Staff</option>
-                            <option value="Admin Gudang">Admin Gudang</option>
-                            <option value="Supervisor">Supervisor</option>
-                            <option value="IT Support">IT Support</option>
+                            <option value="Service Desk IT">Service Desk IT</option>
+                            <option value="Foreman IT">Foreman IT</option>
+                            <option value="Supervisor IT">Supervisor IT</option>
                         </select>
                         <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-slate-500">
                             <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>

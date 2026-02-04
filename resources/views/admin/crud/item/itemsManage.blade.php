@@ -23,14 +23,14 @@
 
 @extends('layouts.dashboard')
 
-@section('title', 'Data Management')
+@section('title', 'Item Management')
 
 @section('content')
     <div class="w-full max-w-7xl mx-auto px-6 py-2 space-y-8 ">
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-slate-800">Data Management</h1>
+                <h1 class="text-2xl font-bold text-slate-800">Item Management</h1>
                 <p class="text-slate-500 text-sm mt-1">Manage your inventory items efficiently.</p>
             </div>
 
@@ -104,7 +104,8 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-xs text-rose-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click to filter</p>
+                <p class="text-xs text-rose-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click
+                    to filter</p>
             </div>
         </div>
 
@@ -149,7 +150,7 @@
                         <span class="hidden sm:inline">Add Stock</span>
                     </button>
 
-                    <a href="#"
+                    <button onclick="openModal('addItemModal')"
                         class="px-5 py-2.5 bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
@@ -157,7 +158,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                         Add Item
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -471,4 +472,125 @@
             }
         }
     </script>
+
+    <div id="addItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" 
+         id="modalBackdrop" onclick="closeModal('addItemModal')"></div>
+
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            
+            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-0 translate-y-4 sm:translate-y-0 scale-95" 
+                 id="modalPanel">
+                
+                <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800" id="modal-title">Add New Item</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Enter item details to update inventory.</p>
+                    </div>
+                    <button type="button" onclick="closeModal('addItemModal')" class="text-slate-400 hover:text-slate-600 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form action="" method="POST"> @csrf
+                    <div class="px-6 py-6 space-y-5">
+                        
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Item Name <span class="text-rose-500">*</span></label>
+                            <input type="text" name="item_name" required placeholder="e.g. Macbook Pro M3"
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Part Number</label>
+                                <input type="text" name="part_number" placeholder="PN-2024-XXX"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Initial Stock <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="number" name="stock" required min="0" placeholder="0"
+                                        class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
+                                    <span class="absolute inset-y-0 right-4 flex items-center text-xs text-slate-400 font-medium">Qty</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Category <span class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <select name="category" required
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700 appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Select Category...</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Furniture">Furniture</option>
+                                    <option value="Stationery">Stationery</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+                                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Description / Notes</label>
+                            <textarea name="description" rows="3" placeholder="Add additional details about the item..."
+                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700 resize-none"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-slate-50 px-6 py-4 flex flex-row-reverse gap-3 rounded-b-3xl border-t border-slate-100">
+                        <button type="submit" 
+                            class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all">
+                            Save Item
+                        </button>
+                        <button type="button" onclick="closeModal('addItemModal')"
+                            class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const backdrop = modal.querySelector('#modalBackdrop');
+        const panel = modal.querySelector('#modalPanel');
+
+        modal.classList.remove('hidden');
+        
+        // Animasi Masuk
+        setTimeout(() => {
+            backdrop.classList.remove('opacity-0');
+            panel.classList.remove('opacity-0', 'translate-y-4', 'scale-95');
+            panel.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+        }, 10);
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const backdrop = modal.querySelector('#modalBackdrop');
+        const panel = modal.querySelector('#modalPanel');
+
+        // Animasi Keluar
+        backdrop.classList.add('opacity-0');
+        panel.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
+        panel.classList.add('opacity-0', 'translate-y-4', 'scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+</script>
 @endsection
