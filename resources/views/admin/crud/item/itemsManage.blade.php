@@ -1,53 +1,28 @@
-@php
-    // 1. Data Tetap Sama
-    $collection = collect([
-        ['item_name' => 'Macbook Pro M2', 'category' => 'Electronics', 'status' => 'Available', 'stock' => 150],
-        ['item_name' => 'Mechanical Keyboard', 'category' => 'Accessories', 'status' => 'Unavailable', 'stock' => 0],
-        ['item_name' => 'Logitech MX Master', 'category' => 'Accessories', 'status' => 'Available', 'stock' => 200],
-        ['item_name' => 'Samsung Monitor 24"', 'category' => 'Electronics', 'status' => 'Available', 'stock' => 75],
-        ['item_name' => 'USB-C Hub', 'category' => 'Accessories', 'status' => 'Unavailable', 'stock' => 0],
-        ['item_name' => 'Ergo Chair', 'category' => 'Furniture', 'status' => 'Available', 'stock' => 12],
-        ['item_name' => 'Standing Desk', 'category' => 'Furniture', 'status' => 'Available', 'stock' => 5],
-        ['item_name' => 'Webcam 4K', 'category' => 'Electronics', 'status' => 'Low Stock', 'stock' => 3],
-        ['item_name' => 'Mousepad XL', 'category' => 'Accessories', 'status' => 'Available', 'stock' => 300],
-        ['item_name' => 'Headset Gaming', 'category' => 'Electronics', 'status' => 'Available', 'stock' => 60],
-    ]);
-
-    // 2. Statistik (Global)
-    $totalCategories = $collection->unique('category')->count();
-    $totalItems = $collection->sum('stock');
-    $lowStockCount = $collection->where('stock', '<', 10)->where('stock', '>', 0)->count();
-    $outOfStockCount = $collection->where('stock', 0)->count();
-    $inStockCount = $collection->where('stock', '>', 0)->count();
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('title', 'Item Management')
 
 @section('content')
-    <div class="w-full max-w-7xl mx-auto px-6 py-2 space-y-8 ">
+    <div class="w-full max-w-7xl mx-auto px-6 py-2 space-y-8 font-sans">
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-2xl font-bold text-slate-800">Item Management</h1>
                 <p class="text-slate-500 text-sm mt-1">Manage your inventory items efficiently.</p>
             </div>
-
             <div class="text-sm text-slate-400 font-medium">
                 {{ now()->format('l, d M Y') }}
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
             <div id="card-in" onclick="filterTable('in')"
                 class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                 <div class="flex justify-between items-start relative z-10">
                     <div>
                         <p class="text-sm font-medium text-slate-500">In Stock</p>
                         <div class="flex items-baseline gap-2 mt-2">
-                            <h3 class="text-3xl font-bold text-slate-800">40</h3>
+                            <h3 class="text-3xl font-bold text-slate-800">{{ $inStockCount }}</h3>
                             <span
                                 class="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Items</span>
                         </div>
@@ -70,7 +45,7 @@
                     <div>
                         <p class="text-sm font-medium text-slate-500">Need Restock</p>
                         <div class="flex items-baseline gap-2 mt-2">
-                            <h3 class="text-3xl font-bold text-slate-800">2</h3>
+                            <h3 class="text-3xl font-bold text-slate-800">{{ $lowStockCount }}</h3>
                             <span class="text-sm font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">Items</span>
                         </div>
                     </div>
@@ -92,7 +67,7 @@
                     <div>
                         <p class="text-sm font-medium text-slate-500">Out of Stock</p>
                         <div class="flex items-baseline gap-2 mt-2">
-                            <h3 class="text-3xl font-bold text-slate-800">2</h3>
+                            <h3 class="text-3xl font-bold text-slate-800">{{ $outOfStockCount }}</h3>
                             <span class="text-sm font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md">Items</span>
                         </div>
                     </div>
@@ -126,6 +101,7 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+
                 <div class="relative w-full md:w-64">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
@@ -151,7 +127,7 @@
                     </button>
 
                     <button onclick="openModal('addItemModal')"
-                        class="px-5 py-2.5 bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200 flex items-center gap-2">
+                        class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd"
                                 d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -207,33 +183,35 @@
                     </thead>
 
                     <tbody class="divide-y divide-slate-100">
-                        @foreach ($collection as $item)
+                        @foreach ($items as $item)
                             <tr class="item-row group hover:bg-indigo-50/30 transition-colors duration-200"
-                                data-stock="{{ $item['stock'] }}">
+                                data-stock="{{ $item->stock }}">
 
                                 <td class="px-6 py-4 text-sm text-slate-400 text-center font-medium">{{ $loop->iteration }}</td>
 
                                 <td
                                     class="px-6 py-4 text-sm font-medium text-slate-700 group-hover:text-indigo-700 transition-colors">
-                                    {{ $item['item_name'] }}
+                                    {{ $item->item_name }}
+                                    @if($item->part_number)
+                                        <div class="text-[10px] text-slate-400 font-mono mt-0.5">{{ $item->part_number }}</div>
+                                    @endif
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
                                     <span
                                         class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
-                                        {{ $item['category'] }}
+                                        {{ $item->category->category_name ?? 'Uncategorized' }}
                                     </span>
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
                                     @php
-                                        // Simple logic for badge color based on stock
                                         $badgeClass = '';
-                                        $statusText = $item['status'];
-                                        if ($item['stock'] == 0) {
+                                        $statusText = 'Available';
+                                        if ($item->stock == 0) {
                                             $badgeClass = 'bg-rose-50 text-rose-700 border-rose-100 ring-rose-500/20';
                                             $statusText = 'Out of Stock';
-                                        } elseif ($item['stock'] < 10) {
+                                        } elseif ($item->stock < 10) {
                                             $badgeClass = 'bg-amber-50 text-amber-700 border-amber-100 ring-amber-500/20';
                                             $statusText = 'Low Stock';
                                         } else {
@@ -249,49 +227,50 @@
                                 </td>
 
                                 <td class="px-6 py-4 text-sm text-slate-700 text-center font-bold">
-                                    {{ $item['stock'] }} <span class="text-slate-400 font-normal text-xs ml-0.5">pcs</span>
+                                    {{ $item->stock }} <span class="text-slate-400 font-normal text-xs ml-0.5">pcs</span>
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100 rounded-lg transition-all shadow-sm"
-                                            title="View QR">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                class="size-5">
-                                                <path fill-rule="evenodd"
-                                                    d="M3.75 2A1.75 1.75 0 0 0 2 3.75v3.5C2 8.216 2.784 9 3.75 9h3.5A1.75 1.75 0 0 0 9 7.25v-3.5A1.75 1.75 0 0 0 7.25 2h-3.5ZM3.5 3.75a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.5a.25.25 0 0 1-.25.25h-3.5a.25.25 0 0 1-.25-.25v-3.5ZM3.75 11A1.75 1.75 0 0 0 2 12.75v3.5c0 .966.784 1.75 1.75 1.75h3.5A1.75 1.75 0 0 0 9 16.25v-3.5A1.75 1.75 0 0 0 7.25 11h-3.5Zm-.25 1.75a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.5a.25.25 0 0 1-.25.25h-3.5a.25.25 0 0 1-.25-.25v-3.5Zm7.5-9c0-.966.784-1.75 1.75-1.75h3.5c.966 0 1.75.784 1.75 1.75v3.5A1.75 1.75 0 0 1 16.25 9h-3.5A1.75 1.75 0 0 1 11 7.25v-3.5Zm1.75-.25a.25.25 0 0 0-.25.25v3.5c0 .138.112.25.25.25h3.5a.25.25 0 0 0 .25-.25v-3.5a.25.25 0 0 0-.25-.25h-3.5Zm-7.26 1a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1V5.5a1 1 0 0 0-1-1h-.01Zm9 0a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1V5.5a1 1 0 0 0-1-1h-.01Zm-9 9a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1v-.01a1 1 0 0 0-1-1h-.01Zm9 0a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1v-.01a1 1 0 0 0-1-1h-.01Zm-3.5-1.5a1 1 0 0 1 1-1H12a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1V12Zm6-1a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1H17a1 1 0 0 0 1-1V12a1 1 0 0 0-1-1h-.01Zm-1 6a1 1 0 0 1 1-1H17a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1V17Zm-4-1a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1H12a1 1 0 0 0 1-1V17a1 1 0 0 0-1-1h-.01Z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
 
-                                        </button>
-                                        <button
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 rounded-lg transition-all shadow-sm"
-                                            title="Edit">
+                                        {{-- EDIT BUTTON --}}
+                                        <button onclick="openEditModal(
+                                                '{{ $item->id }}',
+                                                '{{ $item->item_name }}',
+                                                '{{ $item->part_number }}',
+                                                '{{ $item->stock }}',
+                                                '{{ $item->category_id }}',
+                                                `{{ $item->description }}`
+                                            )"
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all shadow-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </button>
-                                        <button
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 rounded-lg transition-all shadow-sm"
-                                            title="Delete">
+
+                                        {{-- DELETE BUTTON --}}
+                                        <button onclick="openDeleteModal('{{ $item->id }}', '{{ $item->item_name }}')"
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all shadow-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                         </button>
+
                                     </div>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <div id="noDataMessage" class="hidden flex flex-col items-center justify-center py-16 text-center">
+            <div id="noDataMessage"
+                class="{{ count($items) > 0 ? 'hidden' : '' }} flex flex-col items-center justify-center py-16 text-center">
                 <div class="p-4 bg-slate-50 rounded-full mb-3 ring-8 ring-slate-50/50">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -300,13 +279,298 @@
                     </svg>
                 </div>
                 <h3 class="text-slate-900 font-semibold text-lg">No items found</h3>
-                <p class="text-slate-500 text-sm mt-1 max-w-xs mx-auto">Try adjusting your filters or search criteria.</p>
+                <p class="text-slate-500 text-sm mt-1 max-w-xs mx-auto">Try adding new items or adjust filters.</p>
             </div>
         </div>
     </div>
 
+    <div id="addItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop"
+            onclick="closeModal('addItemModal')"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+
+                <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-0 translate-y-4 sm:translate-y-0 scale-95"
+                    id="modalPanel">
+
+                    <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800" id="modal-title">Add New Item</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Enter item details to update inventory.</p>
+                        </div>
+                        <button type="button" onclick="closeModal('addItemModal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form action="{{ route('items.store') }}" method="POST"> @csrf
+                        <div class="px-6 py-6 space-y-5">
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Item Name <span
+                                        class="text-rose-500">*</span></label>
+                                <input type="text" name="item_name" required placeholder="e.g. Macbook Pro M3"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Part Number</label>
+                                    <input type="text" name="part_number" placeholder="PN-2024-XXX"
+                                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Initial Stock <span
+                                            class="text-rose-500">*</span></label>
+                                    <div class="relative">
+                                        <input type="number" name="stock" required min="0" placeholder="0"
+                                            class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
+                                        <span
+                                            class="absolute inset-y-0 right-4 flex items-center text-xs text-slate-400 font-medium">Qty</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Category <span
+                                        class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <select name="category_id" required
+                                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700 appearance-none cursor-pointer">
+                                        <option value="" disabled selected>Select Category...</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
+                                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                            stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Description / Notes</label>
+                                <textarea name="description" rows="3" placeholder="Add additional details about the item..."
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700 resize-none"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="bg-slate-50 px-6 py-4 flex flex-row-reverse gap-3 rounded-b-3xl border-t border-slate-100">
+                            <button type="submit"
+                                class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all">
+                                Save Item
+                            </button>
+                            <button type="button" onclick="closeModal('addItemModal')"
+                                class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="editItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="editModalBackdrop"
+            onclick="closeModal('editItemModal')"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+
+                <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-0 translate-y-4 sm:translate-y-0 scale-95"
+                    id="editModalPanel">
+
+                    <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800" id="modal-title">Edit Item</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Update item information and stock.</p>
+                        </div>
+                        <button type="button" onclick="closeModal('editItemModal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form id="editItemForm" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="px-6 py-6 space-y-5">
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Item Name <span
+                                        class="text-rose-500">*</span></label>
+                                <input type="text" id="edit_item_name" name="item_name" required
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Part Number</label>
+                                    <input type="text" id="edit_part_number" name="part_number"
+                                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1.5">Stock <span
+                                            class="text-rose-500">*</span></label>
+                                    <input type="number" id="edit_stock" name="stock" required min="0"
+                                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Category <span
+                                        class="text-rose-500">*</span></label>
+                                <select id="edit_category_id" name="category_id" required
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700">
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Description / Notes</label>
+                                <textarea id="edit_description" name="description" rows="3"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700 resize-none"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="bg-slate-50 px-6 py-4 flex flex-row-reverse gap-3 rounded-b-3xl border-t border-slate-100">
+                            <button type="submit"
+                                class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all">
+                                Update Item
+                            </button>
+
+                            <button type="button" onclick="closeModal('editItemModal')"
+                                class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="deleteItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="deleteModalBackdrop"
+            onclick="closeModal('deleteItemModal')"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+
+                <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md opacity-0 translate-y-4 sm:translate-y-0 scale-95"
+                    id="deleteModalPanel">
+
+                    <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">Delete Item</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">This action cannot be undone.</p>
+                        </div>
+                        <button type="button" onclick="closeModal('deleteItemModal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <form id="deleteItemForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+
+                        <div class="px-6 py-6">
+                            <p class="text-sm text-slate-600">
+                                Are you sure want to delete item:
+                                <span class="font-bold text-rose-600" id="deleteItemName"></span> ?
+                            </p>
+                        </div>
+
+                        <div
+                            class="bg-slate-50 px-6 py-4 flex flex-row-reverse gap-3 rounded-b-3xl border-t border-slate-100">
+                            <button type="submit"
+                                class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-rose-200 hover:bg-rose-700 hover:shadow-rose-300 transition-all">
+                                Yes, Delete
+                            </button>
+
+                            <button type="button" onclick="closeModal('deleteItemModal')"
+                                class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
-        // --- FILTER FUNCTIONALITY ---
+        // --- 1. MODAL LOGIC ---
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+
+            const backdrop = modal.querySelector('[id$="ModalBackdrop"]') || modal.querySelector('#modalBackdrop');
+            const panel = modal.querySelector('[id$="ModalPanel"]') || modal.querySelector('#modalPanel');
+
+            modal.classList.remove('hidden');
+
+            setTimeout(() => {
+                backdrop.classList.remove('opacity-0');
+                panel.classList.remove('opacity-0', 'translate-y-4', 'scale-95');
+                panel.classList.add('opacity-100', 'translate-y-0', 'scale-100');
+            }, 10);
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+
+            const backdrop = modal.querySelector('[id$="ModalBackdrop"]') || modal.querySelector('#modalBackdrop');
+            const panel = modal.querySelector('[id$="ModalPanel"]') || modal.querySelector('#modalPanel');
+
+            backdrop.classList.add('opacity-0');
+            panel.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
+            panel.classList.add('opacity-0', 'translate-y-4', 'scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+
+        // --- 2. FILTER LOGIC ---
         let currentFilter = 'all';
 
         function filterTable(type) {
@@ -314,24 +578,21 @@
             const cardIn = document.getElementById('card-in');
             const cardRestock = document.getElementById('card-restock');
             const cardOut = document.getElementById('card-out');
-
             const badge = document.getElementById('filter-badge');
             const badgeText = document.getElementById('filter-text');
 
-            // Toggle logic: If clicking the same active filter, reset to all
+            // Toggle filter
             if (currentFilter === type && type !== 'reset') {
                 type = 'reset';
             }
             currentFilter = type;
 
-            // 1. Reset Styles
-            [cardIn, cardRestock, cardOut].forEach(c => {
-                c.classList.remove('ring-2', 'ring-offset-2', 'ring-emerald-500', 'ring-amber-500', 'ring-rose-500');
-            });
+            // Reset Styles
+            [cardIn, cardRestock, cardOut].forEach(c => c.classList.remove('ring-2', 'ring-offset-2', 'ring-emerald-500', 'ring-amber-500', 'ring-rose-500'));
             badge.classList.add('hidden');
             badge.classList.remove('flex');
 
-            // 2. Apply Styles & Logic
+            // Apply Styles
             if (type === 'in') {
                 cardIn.classList.add('ring-2', 'ring-emerald-500', 'ring-offset-2');
                 badgeText.innerText = "In Stock";
@@ -349,7 +610,7 @@
                 badge.classList.add('flex');
             }
 
-            // 3. Filter Rows & Update Numbers
+            // Filter Rows
             let visibleCount = 0;
             let rowNumber = 1;
 
@@ -376,13 +637,13 @@
                 }
             });
 
-            // 4. Handle Empty State
+            // Empty State
             const noDataMsg = document.getElementById('noDataMessage');
             if (visibleCount === 0) noDataMsg.classList.remove('hidden');
             else noDataMsg.classList.add('hidden');
         }
 
-        // --- SEARCH & SORT (Previous Logic Preserved) ---
+        // --- 3. SEARCH LOGIC ---
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
@@ -393,8 +654,10 @@
                     let rowNumber = 1;
 
                     rows.forEach(row => {
+                        // Search by Item Name (col 1) or Category (col 2)
                         const itemName = row.cells[1].textContent.toLowerCase();
                         const category = row.cells[2].textContent.toLowerCase();
+
                         if (itemName.includes(filter) || category.includes(filter)) {
                             row.style.display = '';
                             row.getElementsByTagName('td')[0].innerText = rowNumber++;
@@ -411,12 +674,11 @@
             }
         });
 
-        // --- SORT FUNCTIONALITY ---
+        // --- 4. SORT LOGIC ---
         function sortTable(columnIndex) {
             const table = document.getElementById("dataTable");
             const tbody = table.querySelector('tbody');
             const rows = Array.from(tbody.querySelectorAll('tr'));
-
             const header = document.querySelectorAll('thead th')[columnIndex];
             const currentDir = header.getAttribute('data-dir') || 'none';
             const newDir = (currentDir === 'none' || currentDir === 'desc') ? 'asc' : 'desc';
@@ -440,9 +702,8 @@
             });
 
             tbody.append(...rows);
-            // Re-run filter logic after sort to ensure numbers and visibility are correct
-            // Note: In a real app, sort should respect the current filter. 
-            // For simplicity here, we re-apply row numbering based on current visibility.
+
+            // Re-apply numbering
             let rowNumber = 1;
             rows.forEach(row => {
                 if (row.style.display !== 'none') {
@@ -450,147 +711,59 @@
                 }
             });
 
-            updateSortIcons(columnIndex, newDir);
-        }
-
-        function updateSortIcons(columnIndex, direction) {
+            // Update Icons
             document.querySelectorAll('thead th svg').forEach(svg => {
                 svg.classList.remove('text-indigo-600', 'rotate-180');
                 svg.classList.add('text-slate-300');
             });
-
-            document.querySelectorAll('thead th').forEach((th, idx) => {
-                if (idx !== columnIndex) th.setAttribute('data-dir', 'none');
-            });
-
             const activeIcon = document.getElementById(`icon-${columnIndex}`);
             if (activeIcon) {
                 activeIcon.classList.remove('text-slate-300');
                 activeIcon.classList.add('text-indigo-600');
-                if (direction === 'asc') activeIcon.classList.add('rotate-180');
-                else activeIcon.classList.remove('rotate-180');
+                if (isAscending) activeIcon.classList.add('rotate-180');
             }
         }
+
+        function openEditModal(id, item_name, part_number, stock, category_id, description) {
+            const modal = document.getElementById("editItemModal");
+            const backdrop = modal.querySelector("#editModalBackdrop");
+            const panel = modal.querySelector("#editModalPanel");
+
+            document.getElementById("edit_item_name").value = item_name;
+            document.getElementById("edit_part_number").value = part_number;
+            document.getElementById("edit_stock").value = stock;
+            document.getElementById("edit_category_id").value = category_id;
+            document.getElementById("edit_description").value = description;
+
+            // set action form update
+            document.getElementById("editItemForm").action = `/items/${id}`;
+
+            modal.classList.remove("hidden");
+
+            setTimeout(() => {
+                backdrop.classList.remove("opacity-0");
+                panel.classList.remove("opacity-0", "translate-y-4", "scale-95");
+                panel.classList.add("opacity-100", "translate-y-0", "scale-100");
+            }, 10);
+        }
+
+        function openDeleteModal(id, item_name) {
+            const modal = document.getElementById("deleteItemModal");
+            const backdrop = modal.querySelector("#deleteModalBackdrop");
+            const panel = modal.querySelector("#deleteModalPanel");
+
+            document.getElementById("deleteItemName").innerText = item_name;
+
+            // set action form delete
+            document.getElementById("deleteItemForm").action = `/items/${id}`;
+
+            modal.classList.remove("hidden");
+
+            setTimeout(() => {
+                backdrop.classList.remove("opacity-0");
+                panel.classList.remove("opacity-0", "translate-y-4", "scale-95");
+                panel.classList.add("opacity-100", "translate-y-0", "scale-100");
+            }, 10);
+        }
     </script>
-
-    <div id="addItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    
-    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" 
-         id="modalBackdrop" onclick="closeModal('addItemModal')"></div>
-
-    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            
-            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-0 translate-y-4 sm:translate-y-0 scale-95" 
-                 id="modalPanel">
-                
-                <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-800" id="modal-title">Add New Item</h3>
-                        <p class="text-xs text-slate-500 mt-0.5">Enter item details to update inventory.</p>
-                    </div>
-                    <button type="button" onclick="closeModal('addItemModal')" class="text-slate-400 hover:text-slate-600 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <form action="" method="POST"> @csrf
-                    <div class="px-6 py-6 space-y-5">
-                        
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Item Name <span class="text-rose-500">*</span></label>
-                            <input type="text" name="item_name" required placeholder="e.g. Macbook Pro M3"
-                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Part Number</label>
-                                <input type="text" name="part_number" placeholder="PN-2024-XXX"
-                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Initial Stock <span class="text-rose-500">*</span></label>
-                                <div class="relative">
-                                    <input type="number" name="stock" required min="0" placeholder="0"
-                                        class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700">
-                                    <span class="absolute inset-y-0 right-4 flex items-center text-xs text-slate-400 font-medium">Qty</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Category <span class="text-rose-500">*</span></label>
-                            <div class="relative">
-                                <select name="category" required
-                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm font-medium text-slate-700 appearance-none cursor-pointer">
-                                    <option value="" disabled selected>Select Category...</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Accessories">Accessories</option>
-                                    <option value="Furniture">Furniture</option>
-                                    <option value="Stationery">Stationery</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500">
-                                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1.5">Description / Notes</label>
-                            <textarea name="description" rows="3" placeholder="Add additional details about the item..."
-                                class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-sm font-medium text-slate-700 resize-none"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div class="bg-slate-50 px-6 py-4 flex flex-row-reverse gap-3 rounded-b-3xl border-t border-slate-100">
-                        <button type="submit" 
-                            class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700 hover:shadow-indigo-300 transition-all">
-                            Save Item
-                        </button>
-                        <button type="button" onclick="closeModal('addItemModal')"
-                            class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    function openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        const backdrop = modal.querySelector('#modalBackdrop');
-        const panel = modal.querySelector('#modalPanel');
-
-        modal.classList.remove('hidden');
-        
-        // Animasi Masuk
-        setTimeout(() => {
-            backdrop.classList.remove('opacity-0');
-            panel.classList.remove('opacity-0', 'translate-y-4', 'scale-95');
-            panel.classList.add('opacity-100', 'translate-y-0', 'scale-100');
-        }, 10);
-    }
-
-    function closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        const backdrop = modal.querySelector('#modalBackdrop');
-        const panel = modal.querySelector('#modalPanel');
-
-        // Animasi Keluar
-        backdrop.classList.add('opacity-0');
-        panel.classList.remove('opacity-100', 'translate-y-0', 'scale-100');
-        panel.classList.add('opacity-0', 'translate-y-4', 'scale-95');
-
-        setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 300);
-    }
-</script>
 @endsection

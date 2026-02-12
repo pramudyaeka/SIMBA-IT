@@ -3,11 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
-use App\Http\Middleware\AuthMiddleware;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\HistoryController;
 
 /*
 |--------------------------------------------------------------------------
-| DEFAULT
+| DEFAULT ROUTE
 |--------------------------------------------------------------------------
 */
 
@@ -17,69 +19,72 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| AUTH
+| AUTH ROUTES (GUEST ONLY)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', function () {
-    return view('welcome'); // <-- PANGGIL welcome.blade.php
-})->name('login');
+Route::middleware('guest')->group(function () {
 
-Route::post('/login', function () {
-    // sementara (dummy auth)
-    return redirect()->route('dashboard');
-})->name('login.process');
+    // Login
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('login.process');
 
-// Route::get('/signup', function () {
-//     return view('auth.signup');
-// })->name('signup');
-
-Route::get('/register', function () {
-    // Pastikan 'auth.signup' sesuai dengan nama file dan folder view kamu.
-    // Misal: resources/views/auth/signup.blade.php
-    return view('auth.signup'); 
-})->name('register.form');
+    // Register
+    Route::get('/register', [RegisterController::class, 'index'])->name('register.form');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+});
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD
+| PROTECTED ROUTES (AUTH REQUIRED)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard-admin');
-})->middleware(AuthMiddleware::class)->name('dashboard');
+Route::middleware('auth')->group(function () {
 
-Route::get('/items', function () {
-    return view('admin.crud.item.itemsManage');
-})->name('items.manage');
+    // Logout
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/manage/crud/add-item', function () {
-    return view('admin.crud.item.addItem');
-})->name('crud.addItem');
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard-admin');
+    })->name('dashboard');
 
-Route::get('/manage/crud/add-category', function () {
-    return view('admin.crud.category.addCategory');
-})->name('crud.addCategory');
+    /*
+    |--------------------------------------------------------------------------
+    | ITEM MANAGEMENT (CRUD)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/items', [ItemsController::class, 'index'])->name('items.manage');
+    Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
+    Route::put('/items/{id}', [ItemsController::class, 'update'])->name('items.update');
+    Route::delete('/items/{id}', [ItemsController::class, 'destroy'])->name('items.destroy');
 
-Route::get('/categories', function () {
-    return view('admin.crud.category.categoriesManage');
-})->name('categories.manage');
+    /*
+    |--------------------------------------------------------------------------
+    | CATEGORY MANAGEMENT (CRUD)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.manage');
+    Route::post('/categories', [CategoriesController::class, 'store'])->name('categories.store');
 
-Route::get('/reports', function () {
-    return view('admin.reports');
-})->name('reports.page');
+    /*
+    |--------------------------------------------------------------------------
+    | HISTORY
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/history', [HistoryController::class, 'index'])->name('history.page');
 
-Route::get('/history', function () {
-    return view('admin.history');
-})->name('history.page');
+    /*
+    |--------------------------------------------------------------------------
+    | OTHER PAGES
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/reports', function () {
+        return view('admin.reports');
+    })->name('reports.page');
 
-Route::get('/accountManagement', function () {
-    return view('admin.accountManagement');
-})->name('accountManagement.page');
-
-Route::post('/register', [RegisterController::class, 'store']);
-
-Route::post('/login', [LoginController::class, 'authenticate'])->name('login.process');
-
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/account-management', function () {
+        return view('admin.accountManagement');
+    })->name('accountManagement.page');
+});
