@@ -75,6 +75,12 @@ Route::middleware('auth')->group(function () {
     */
     Route::get('/history', [HistoryController::class, 'index'])->name('history.page');
 
+
+    // Rute untuk halaman Dashboard
+    Route::get('/dashboard', [ItemsController::class, 'dashboard'])->name('dashboard');
+
+    // Rute untuk memproses hasil scan QR
+    Route::post('/items/transaction', [ItemsController::class, 'processTransaction'])->name('items.transaction');
     /*
     |--------------------------------------------------------------------------
     | OTHER PAGES

@@ -235,13 +235,13 @@
 
                                         {{-- EDIT BUTTON --}}
                                         <button onclick="openEditModal(
-                                                '{{ $item->id }}',
-                                                '{{ $item->item_name }}',
-                                                '{{ $item->part_number }}',
-                                                '{{ $item->stock }}',
-                                                '{{ $item->category_id }}',
-                                                `{{ $item->description }}`
-                                            )"
+                                                                        '{{ $item->id }}',
+                                                                        '{{ $item->item_name }}',
+                                                                        '{{ $item->part_number }}',
+                                                                        '{{ $item->stock }}',
+                                                                        '{{ $item->category_id }}',
+                                                                        `{{ $item->description }}`
+                                                                    )"
                                             class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all shadow-sm">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -257,6 +257,18 @@
                                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+
+                                        {{-- QR CODE BUTTON --}}
+                                        <button
+                                            onclick="openQrModal('{{ $item->item_name }}', '{{ $item->part_number ?? $item->id }}')"
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-all shadow-sm"
+                                            title="Tampilkan QR Code">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                                             </svg>
                                         </button>
 
@@ -384,6 +396,60 @@
         </div>
     </div>
 
+    <div id="qrItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="qrModalBackdrop"
+            onclick="closeModal('qrItemModal')"></div>
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-sm opacity-0 translate-y-4 sm:translate-y-0 scale-95"
+                    id="qrModalPanel">
+
+                    <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">Item QR Code</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Scan untuk melihat status stok barang.</p>
+                        </div>
+                        <button type="button" onclick="closeModal('qrItemModal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="px-6 py-8 flex flex-col items-center justify-center">
+                        <div class="p-4 bg-white rounded-2xl shadow-sm border border-slate-100 mb-4 ring-4 ring-slate-50">
+                            <img id="qrCodeImage" src="" alt="QR Code" class="w-48 h-48 object-contain">
+                        </div>
+                        <h4 id="qrItemName" class="text-lg font-bold text-slate-800 text-center"></h4>
+                        <p id="qrItemCode"
+                            class="text-sm font-mono text-slate-500 mt-1 text-center bg-slate-100 px-3 py-1 rounded-md"></p>
+                    </div>
+
+                    <div
+                        class="bg-slate-50 px-6 py-4 flex flex-col sm:flex-row-reverse gap-3 rounded-b-3xl border-t border-slate-100">
+                        <button type="button" onclick="downloadQR()"
+                            class="inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 hover:shadow-emerald-300 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Download QR
+                        </button>
+                        <button type="button" onclick="closeModal('qrItemModal')"
+                            class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
+                            Tutup
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="editItemModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
         <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity opacity-0" id="editModalBackdrop"
@@ -406,8 +472,7 @@
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                            </svg> </button>
                     </div>
 
                     <form id="editItemForm" method="POST">
@@ -501,8 +566,7 @@
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                            </svg> </button>
                     </div>
 
                     <form id="deleteItemForm" method="POST">
@@ -764,6 +828,48 @@
                 panel.classList.remove("opacity-0", "translate-y-4", "scale-95");
                 panel.classList.add("opacity-100", "translate-y-0", "scale-100");
             }, 10);
+        }
+
+        function openQrModal(itemName, identifier) {
+            const modal = document.getElementById("qrItemModal");
+            const backdrop = modal.querySelector("#qrModalBackdrop");
+            const panel = modal.querySelector("#qrModalPanel");
+
+            document.getElementById("qrItemName").innerText = itemName;
+            document.getElementById("qrItemCode").innerText = identifier || 'N/A';
+
+            // Data yang akan di encode ke dalam QR. 
+            // Saran: Jika nantinya ingin langsung diarahkan ke halaman detail saat discan,
+            // ganti `qrData` menjadi URL aplikasimu, misal: `${window.location.origin}/items/${identifier}`
+            const qrData = encodeURIComponent(identifier);
+
+            // Memanggil public API untuk generate QR Code
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrData}`;
+            document.getElementById("qrCodeImage").src = qrUrl;
+
+            modal.classList.remove("hidden");
+
+            setTimeout(() => {
+                backdrop.classList.remove("opacity-0");
+                panel.classList.remove("opacity-0", "translate-y-4", "scale-95");
+                panel.classList.add("opacity-100", "translate-y-0", "scale-100");
+            }, 10);
+        }
+
+        // Fungsi opsional untuk mengunduh gambar QR Code
+        function downloadQR() {
+            const imgUrl = document.getElementById("qrCodeImage").src;
+            const itemName = document.getElementById("qrItemName").innerText;
+
+            fetch(imgUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `QR-${itemName.replace(/\s+/g, '-')}.png`;
+                    link.click();
+                })
+                .catch(console.error);
         }
     </script>
 @endsection

@@ -33,7 +33,7 @@
                             {{ Auth::user()->first_name ?? 'User' }}
                         </p>
                         <p class="text-[11px] text-slate-400">
-                            Staff IT
+                            {{ Auth::user()->role ?? 'User' }}
                         </p>
                     </div>
 
