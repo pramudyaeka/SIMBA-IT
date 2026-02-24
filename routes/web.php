@@ -6,6 +6,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController; // <-- DITAMBAHKAN: Import ReportController
 
 /*
 |--------------------------------------------------------------------------
@@ -45,20 +47,25 @@ Route::middleware('auth')->group(function () {
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    // Dashboard
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard-admin');
-    })->name('dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', [ItemsController::class, 'dashboard'])->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
-    | ITEM MANAGEMENT (CRUD)
+    | ITEM MANAGEMENT (CRUD & SCANNER)
     |--------------------------------------------------------------------------
     */
     Route::get('/items', [ItemsController::class, 'index'])->name('items.manage');
     Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
     Route::put('/items/{id}', [ItemsController::class, 'update'])->name('items.update');
     Route::delete('/items/{id}', [ItemsController::class, 'destroy'])->name('items.destroy');
+    
+    // Rute untuk memproses hasil scan QR
+    Route::post('/items/transaction', [ItemsController::class, 'processTransaction'])->name('items.transaction');
 
     /*
     |--------------------------------------------------------------------------
@@ -70,27 +77,22 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | HISTORY
+    | HISTORY & REPORTS
     |--------------------------------------------------------------------------
     */
     Route::get('/history', [HistoryController::class, 'index'])->name('history.page');
 
+    // <-- DIPERBAIKI: Mengarah ke ReportController dan namanya diubah menjadi reports.index
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.page');
 
-    // Rute untuk halaman Dashboard
-    Route::get('/dashboard', [ItemsController::class, 'dashboard'])->name('dashboard');
-
-    // Rute untuk memproses hasil scan QR
-    Route::post('/items/transaction', [ItemsController::class, 'processTransaction'])->name('items.transaction');
     /*
     |--------------------------------------------------------------------------
-    | OTHER PAGES
+    | ACCOUNT MANAGEMENT (USER CRUD)
     |--------------------------------------------------------------------------
     */
-    Route::get('/reports', function () {
-        return view('admin.reports');
-    })->name('reports.page');
+    Route::get('/account-management', [UserController::class, 'index'])->name('accountManagement.page');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-    Route::get('/account-management', function () {
-        return view('admin.accountManagement');
-    })->name('accountManagement.page');
 });

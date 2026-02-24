@@ -1,63 +1,25 @@
-@php
-    // Dummy Data User
-    $users = collect([
-        [
-            'id' => 1,
-            'name' => 'Pranata Eka',
-            'email' => 'pranata@simbait.com',
-            'role' => 'Supervisor', // Role Tertinggi
-            'status' => 'Active',
-            'avatar' => 'PE',
-            'joined_at' => '2023-01-15'
-        ],
-        [
-            'id' => 2,
-            'name' => 'Siti Aminah',
-            'email' => 'siti.am@simbait.com',
-            'role' => 'Admin Gudang',
-            'status' => 'Active',
-            'avatar' => 'SA',
-            'joined_at' => '2023-03-22'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Budi Santoso',
-            'email' => 'budi.san@simbait.com',
-            'role' => 'Staff',
-            'status' => 'Active',
-            'avatar' => 'BS',
-            'joined_at' => '2023-06-10'
-        ],
-        [
-            'id' => 4,
-            'name' => 'Joko Anwar',
-            'email' => 'joko.anwar@simbait.com',
-            'role' => 'Staff',
-            'status' => 'Inactive', // User non-aktif
-            'avatar' => 'JA',
-            'joined_at' => '2023-07-05'
-        ],
-        [
-            'id' => 5,
-            'name' => 'Rina Wati',
-            'email' => 'rina.wati@simbait.com',
-            'role' => 'Viewer', // Role hanya lihat
-            'status' => 'Active',
-            'avatar' => 'RW',
-            'joined_at' => '2023-08-12'
-        ],
-    ]);
-
-    $totalUsers = $users->count();
-    $activeUsers = $users->where('status', 'Active')->count();
-    $adminCount = $users->whereIn('role', ['Supervisor', 'Admin Gudang'])->count();
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('title', 'Account Management')
 
 @section('content')
+    {{-- CUSTOM CSS UNTUK SCROLLBAR SAMAR --}}
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* Setara Tailwind text-slate-300 */
+            border-radius: 20px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #94a3b8; /* Setara Tailwind text-slate-400 */
+        }
+    </style>
+
     <div class="w-full max-w-7xl mx-auto px-6 py-6 space-y-8 font-jakarta">
 
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -75,7 +37,7 @@
             <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Users</p>
-                    <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ $totalUsers }}</h3>
+                    <h3 class="text-3xl font-bold text-slate-800 mt-1">{{ $totalUsers ?? 0 }}</h3>
                     <p class="text-xs text-slate-500 mt-1">Registered accounts</p>
                 </div>
                 <div class="p-3 bg-indigo-50 text-indigo-600 rounded-2xl">
@@ -88,7 +50,7 @@
             <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Users</p>
-                    <h3 class="text-3xl font-bold text-emerald-600 mt-1">{{ $activeUsers }}</h3>
+                    <h3 class="text-3xl font-bold text-emerald-600 mt-1">{{ $activeUsers ?? 0 }}</h3>
                     <p class="text-xs text-slate-500 mt-1">Currently active</p>
                 </div>
                 <div class="p-3 bg-emerald-50 text-emerald-600 rounded-2xl">
@@ -101,7 +63,7 @@
             <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between">
                 <div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Admins & Supervisors</p>
-                    <h3 class="text-3xl font-bold text-violet-600 mt-1">{{ $adminCount }}</h3>
+                    <h3 class="text-3xl font-bold text-violet-600 mt-1">{{ $adminCount ?? 0 }}</h3>
                     <p class="text-xs text-slate-500 mt-1">High privilege access</p>
                 </div>
                 <div class="p-3 bg-violet-50 text-violet-600 rounded-2xl">
@@ -113,7 +75,6 @@
         </div>
 
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-            
             <div class="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50/50">
                 <div class="relative w-full sm:w-72">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -127,7 +88,7 @@
                 </div>
 
                 <button onclick="openUserModal()" 
-                   class="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200">
+                   class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
@@ -147,37 +108,37 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        @foreach ($users as $user)
+                        @forelse ($users as $user)
                             <tr class="group hover:bg-indigo-50/30 transition-colors duration-200">
                                 
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="size-10 rounded-full bg-slate-200 flex items-center justify-center text-sm font-bold text-slate-600 border-2 border-white shadow-sm">
-                                            {{ $user['avatar'] }}
+                                        <div class="size-10 rounded-full bg-slate-200 flex items-center justify-center text-sm font-bold text-slate-600 border-2 border-white shadow-sm uppercase">
+                                            {{ substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1) }}
                                         </div>
                                         <div>
-                                            <p class="text-sm font-bold text-slate-700">{{ $user['name'] }}</p>
-                                            <p class="text-xs text-slate-500">{{ $user['email'] }}</p>
+                                            <p class="text-sm font-bold text-slate-700">{{ $user->first_name }} {{ $user->last_name }}</p>
+                                            <p class="text-xs text-slate-500">{{ $user->email }}</p>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="px-6 py-4">
                                     @php
-                                        $roleColor = match($user['role']) {
-                                            'Supervisor' => 'bg-violet-100 text-violet-700 border-violet-200',
-                                            'Admin Gudang' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
-                                            'Staff' => 'bg-blue-50 text-blue-600 border-blue-200',
+                                        $roleColor = match($user->role ?? 'Staff') {
+                                            'Supervisor IT' => 'bg-violet-100 text-violet-700 border-violet-200',
+                                            'Foreman IT' => 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                                            'Service Desk IT' => 'bg-blue-50 text-blue-600 border-blue-200',
                                             default => 'bg-slate-100 text-slate-600 border-slate-200',
                                         };
                                     @endphp
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border {{ $roleColor }}">
-                                        {{ $user['role'] }}
+                                        {{ $user->role ?? 'Staff' }}
                                     </span>
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
-                                    @if($user['status'] === 'Active')
+                                    @if(($user->status ?? 'Active') === 'Active')
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-emerald-600 bg-emerald-50 border border-emerald-100">
                                             <span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
                                         </span>
@@ -189,34 +150,40 @@
                                 </td>
 
                                 <td class="px-6 py-4 text-center text-sm text-slate-500">
-                                    {{ \Carbon\Carbon::parse($user['joined_at'])->format('d M Y') }}
+                                    {{ \Carbon\Carbon::parse($user->created_at)->format('d M Y') }}
                                 </td>
 
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        <button onclick="editUser('{{ $user['name'] }}', '{{ $user['email'] }}', '{{ $user['role'] }}')" 
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 rounded-lg transition-all shadow-sm" title="Edit Role">
+                                        <button onclick="editUser('{{ $user->id }}', '{{ addslashes($user->first_name) }}', '{{ addslashes($user->last_name) }}', '{{ $user->email }}', '{{ $user->role }}', '{{ $user->phone }}', '{{ $user->address }}')" 
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 rounded-lg transition-all shadow-sm" title="Edit Data">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                         </button>
-                                        <button onclick="deleteUser('{{ $user['name'] }}')"
+                                        <button onclick="deleteUser('{{ $user->id }}', '{{ addslashes($user->first_name) }} {{ addslashes($user->last_name) }}')"
                                             class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 rounded-lg transition-all shadow-sm" title="Delete User">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-6 py-8 text-center text-slate-500">No users found in database.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    {{-- MODAL CREATE & EDIT --}}
     <div id="userModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeUserModal()"></div>
         
         <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="bg-white rounded-3xl shadow-xl w-full max-w-md p-6 transform transition-all scale-100">
+            {{-- PERUBAHAN DI SINI: max-h-[85vh] dan penambahan class custom-scrollbar --}}
+            <div class="bg-white rounded-3xl shadow-xl w-full max-w-md p-6 transform transition-all scale-100 max-h-[85vh] overflow-y-auto custom-scrollbar">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold text-slate-800" id="modalTitle">Add New User</h3>
                     <button onclick="closeUserModal()" class="text-slate-400 hover:text-slate-600">
@@ -224,61 +191,150 @@
                     </button>
                 </div>
 
-                <form id="userForm" onsubmit="saveUser(event)">
+                <form id="userForm" method="POST" action="{{ route('users.store') }}">
+                    @csrf
+                    <input type="hidden" name="_method" id="formMethod" value="POST">
+
                     <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Full Name</label>
-                            <input type="text" id="inputName" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="e.g. John Doe" required>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">First Name</label>
+                                <input type="text" id="inputFirstName" name="first_name" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="John" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Last Name</label>
+                                <input type="text" id="inputLastName" name="last_name" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="Doe" required>
+                            </div>
                         </div>
                         
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Email Address</label>
-                            <input type="email" id="inputEmail" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="e.g. john@simbait.com" required>
+                            <input type="email" id="inputEmail" name="email" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="e.g. john@perusahaan.com" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Address</label>
+                            <input type="text" id="inputAddress" name="address" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="e.g. Jl. Pertambangan No. 1">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Phone Number</label>
+                            <input type="text" id="inputPhone" name="phone" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="e.g. 081234567890">
                         </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-slate-700 mb-1">Assign Role</label>
-                            <select id="inputRole" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-white">
-                                <option value="Staff">Staff</option>
-                                <option value="Admin Gudang">Admin Gudang</option>
-                                <option value="Supervisor">Supervisor</option>
-                                <option value="Viewer">Viewer (Read Only)</option>
+                            <select id="inputRole" name="role" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all bg-white">
+                                <option value="Service Desk IT">Service Desk IT</option>
+                                <option value="Foreman IT">Foreman IT</option>
+                                <option value="Supervisor IT">Supervisor IT</option>
                             </select>
                         </div>
-                        
+
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+                            <input type="password" id="inputPassword" name="password" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" placeholder="Enter password" required>
+                            <p id="passwordHelp" class="text-xs text-slate-500 mt-1 hidden">Leave blank to keep current password.</p>
                         </div>
+                    </div>
 
                     <div class="mt-8 flex gap-3">
                         <button type="button" onclick="closeUserModal()" class="flex-1 px-4 py-2.5 bg-white border border-slate-200 text-slate-600 font-semibold rounded-xl hover:bg-slate-50 transition">Cancel</button>
-                        <button type="submit" class="flex-1 px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">Save User</button>
+                        <button type="submit" class="flex-1 px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">Add User</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
+    <form id="deleteUserForm" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if ($errors->any())
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    html: `
+                        <ul class="text-left text-sm text-rose-500 list-disc ml-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    confirmButtonColor: '#E11D48'
+                });
+            @elseif (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    confirmButtonColor: '#4F46E5',
+                    timer: 3000
+                });
+            @elseif (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#E11D48'
+                });
+            @endif
+        });
+
         const modal = document.getElementById('userModal');
         const modalTitle = document.getElementById('modalTitle');
-        const inputName = document.getElementById('inputName');
-        const inputEmail = document.getElementById('inputEmail');
+        const userForm = document.getElementById('userForm');
+        const formMethod = document.getElementById('formMethod');
+        
+        const inputFirstName = document.getElementById('inputFirstName');
+        const inputLastName = document.getElementById('inputLastName');
+        const inputEmail = document.getElementById('inputEmail'); 
+        const inputAddress = document.getElementById('inputAddress');
+        const inputPhone = document.getElementById('inputPhone');
         const inputRole = document.getElementById('inputRole');
+        const inputPassword = document.getElementById('inputPassword');
+        const passwordHelp = document.getElementById('passwordHelp');
 
         function openUserModal() {
-            // Reset form for "Add New"
             modalTitle.innerText = "Add New User";
-            inputName.value = "";
+            userForm.action = "{{ route('users.store') }}"; 
+            formMethod.value = "POST"; 
+            
+            inputFirstName.value = "";
+            inputLastName.value = "";
             inputEmail.value = "";
-            inputRole.value = "Staff";
+            inputAddress.value = "";
+            inputPhone.value = "";
+            inputRole.value = "Service Desk IT";
+            inputPassword.value = ""; 
+            
+            inputPassword.required = true; 
+            passwordHelp.classList.add('hidden'); 
+
             modal.classList.remove('hidden');
         }
 
-        function editUser(name, email, role) {
-            // Pre-fill form for "Edit"
-            modalTitle.innerText = "Edit User Role";
-            inputName.value = name;
+        function editUser(id, firstName, lastName, email, role, phone, address) {
+            modalTitle.innerText = "Edit User Details";
+            userForm.action = `/users/${id}`; 
+            formMethod.value = "PUT"; 
+            
+            inputFirstName.value = firstName;
+            inputLastName.value = lastName;
             inputEmail.value = email;
-            inputRole.value = role;
+            inputRole.value = role ? role : "Service Desk IT";
+            inputPhone.value = phone ? phone : "";
+            inputAddress.value = address ? address : "";
+            inputPassword.value = ""; 
+            
+            inputPassword.required = false; 
+            passwordHelp.classList.remove('hidden');
+
             modal.classList.remove('hidden');
         }
 
@@ -286,35 +342,20 @@
             modal.classList.add('hidden');
         }
 
-        function saveUser(e) {
-            e.preventDefault();
-            closeUserModal();
-            // Mockup Success Message
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: 'User data has been updated successfully.',
-                confirmButtonColor: '#4F46E5',
-                timer: 2000
-            });
-        }
-
-        function deleteUser(name) {
+        function deleteUser(id, fullName) {
             Swal.fire({
                 title: 'Are you sure?',
-                text: `You are about to remove "${name}" access.`,
+                text: `You are about to remove "${fullName}" from the system.`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#E11D48', // Rose 600
-                cancelButtonColor: '#64748B', // Slate 500
+                confirmButtonColor: '#E11D48',
+                cancelButtonColor: '#64748B',
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                        'Deleted!',
-                        'User access has been revoked.',
-                        'success'
-                    )
+                    const form = document.getElementById('deleteUserForm');
+                    form.action = `/users/${id}`;
+                    form.submit();
                 }
             })
         }

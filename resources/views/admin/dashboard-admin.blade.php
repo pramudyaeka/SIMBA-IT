@@ -30,7 +30,7 @@
                             </svg>
                         </div>
                         <h3 class="text-lg font-bold">Scan QR Code</h3>
-                        <p class="text-sm text-indigo-100 mt-1 font-medium">Ambil / Tambah Stok</p>
+                        <p class="text-sm text-indigo-100 mt-1 font-medium">Take / Add Stock</p>
                     </div>
                 </div>
             </div>
@@ -177,7 +177,7 @@
                                 <td class="px-6 py-4 text-center">
                                     <button onclick="openQrModal('{{ $item->item_name }}', '{{ $item->id }}')"
                                         class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-all shadow-sm"
-                                        title="Tampilkan QR Code">
+                                        title="View QR Code">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -217,7 +217,7 @@
                     <div class="bg-white px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                         <div>
                             <h3 class="text-lg font-bold text-slate-800">Item QR Code</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Scan untuk melihat atau update stok.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Scan to view or update stock.</p>
                         </div>
                         <button type="button" onclick="closeQrModal()"
                             class="text-slate-400 hover:text-slate-600 transition">
@@ -251,7 +251,7 @@
                         </button>
                         <button type="button" onclick="closeQrModal()"
                             class="inline-flex w-full sm:w-auto justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm border border-slate-200 hover:bg-slate-50 transition-all">
-                            Tutup
+                            Close
                         </button>
                     </div>
 
@@ -271,8 +271,8 @@
 
                     <div class="bg-white px-6 py-4 border-b border-slate-100 flex items-center justify-between">
                         <div>
-                            <h3 class="text-lg font-bold text-slate-800">Transaksi Inventaris</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Silakan pilih item yang ingin diproses</p>
+                            <h3 class="text-lg font-bold text-slate-800">Inventory Transaction</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Please select an item to process</p>
                         </div>
                         <button type="button" onclick="closeScannerModal()"
                             class="text-slate-400 hover:text-rose-500 transition-colors">
@@ -287,11 +287,11 @@
                     <div class="px-6 py-5">
                         <div class="flex gap-4 p-1 bg-slate-100 rounded-xl mb-5">
                             <button type="button" onclick="setTransactionType('take')" id="btnTake"
-                                class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition-all">Ambil
-                                Barang</button>
+                                class="flex-1 py-2 text-sm font-bold rounded-lg bg-white text-indigo-600 shadow-sm transition-all">Take
+                                Item</button>
                             <button type="button" onclick="setTransactionType('add')" id="btnAdd"
-                                class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-slate-700 transition-all">Tambah
-                                Stok</button>
+                                class="flex-1 py-2 text-sm font-bold rounded-lg text-slate-500 hover:text-slate-700 transition-all">Add
+                                Stock</button>
                         </div>
 
                         {{-- ============================== --}}
@@ -304,10 +304,10 @@
                             </div>
 
                             <div id="manualArea" class="hidden relative">
-                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Cari Berdasarkan Nama
-                                    Barang</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Search by Item
+                                    Name</label>
                                 <input type="text" id="manualInput" onkeyup="searchItemByName()"
-                                    placeholder="Ketik nama barang..." autocomplete="off"
+                                    placeholder="Type item name..." autocomplete="off"
                                     class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm font-medium">
 
                                 <ul id="searchResultList"
@@ -318,7 +318,7 @@
                             <div class="text-center mt-4">
                                 <button type="button" onclick="toggleManualMode()" id="btnToggleManual"
                                     class="text-sm font-semibold text-indigo-600 hover:text-indigo-800">
-                                    Kamera Bermasalah? Cari Manual
+                                    Camera Issue? Search Manually
                                 </button>
                             </div>
                         </div>
@@ -328,24 +328,24 @@
                         {{-- ============================== --}}
                         <div id="step2-qty" class="hidden space-y-5">
                             <div class="p-4 bg-indigo-50 rounded-xl text-center border border-indigo-100">
-                                <p class="text-xs text-indigo-600 font-semibold mb-1 uppercase tracking-wider">Barang
-                                    Terpilih</p>
-                                <h4 id="selectedItemName" class="text-xl font-bold text-slate-800">Nama Barang</h4>
-                                <p id="selectedItemStatus" class="text-sm text-slate-500 mt-1">Stok: 0</p>
+                                <p class="text-xs text-indigo-600 font-semibold mb-1 uppercase tracking-wider">Selected
+                                    Item</p>
+                                <h4 id="selectedItemName" class="text-xl font-bold text-slate-800">Item Name</h4>
+                                <p id="selectedItemStatus" class="text-sm text-slate-500 mt-1">Stock: 0</p>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Jumlah (Qty)</label>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Quantity (Qty)</label>
                                 <input type="number" id="transactionQty" value="1" min="1"
                                     class="w-full px-4 py-2.5 text-center text-xl rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-bold text-slate-800">
                             </div>
 
                             <div class="flex gap-3 pt-2">
                                 <button type="button" onclick="backToStep1()"
-                                    class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">Ganti
-                                    Barang</button>
+                                    class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">Change
+                                    Item</button>
                                 <button type="button" onclick="submitTransaction()"
-                                    class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-md">Proses</button>
+                                    class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-md">Process</button>
                             </div>
                         </div>
 
@@ -371,7 +371,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Berhasil!',
+                    title: 'Success!',
                     text: "{{ session('success') }}",
                     confirmButtonColor: '#4f46e5'
                 });
@@ -384,7 +384,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal!',
+                    title: 'Failed!',
                     text: "{{ session('error') }}",
                     confirmButtonColor: '#e11d48'
                 });
@@ -581,8 +581,8 @@
             } else {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Tidak Ditemukan',
-                    text: 'QR Code tidak cocok dengan barang manapun di database.',
+                    title: 'Not Found',
+                    text: 'QR Code does not match any item in the database.',
                     confirmButtonColor: '#4f46e5'
                 });
             }
@@ -603,12 +603,12 @@
                 if (html5QrcodeScanner) html5QrcodeScanner.clear();
                 camArea.classList.add('hidden');
                 manArea.classList.remove('hidden');
-                btnToggle.innerText = "Kembali ke Scanner Kamera";
+                btnToggle.innerText = "Back to Camera Scanner";
                 document.getElementById('manualInput').focus();
             } else {
                 camArea.classList.remove('hidden');
                 manArea.classList.add('hidden');
-                btnToggle.innerText = "Kamera Bermasalah? Cari Manual";
+                btnToggle.innerText = "Camera Issue? Search Manually";
                 document.getElementById('manualInput').value = '';
                 document.getElementById('searchResultList').classList.add('hidden');
 
@@ -631,12 +631,12 @@
             const filteredItems = allItemsData.filter(i => i.item_name.toLowerCase().includes(inputVal));
 
             if (filteredItems.length === 0) {
-                resultList.innerHTML = '<li class="px-4 py-3 text-sm text-slate-500 text-center">Barang tidak ditemukan</li>';
+                resultList.innerHTML = '<li class="px-4 py-3 text-sm text-slate-500 text-center">Item not found</li>';
             } else {
                 filteredItems.forEach(item => {
                     const li = document.createElement('li');
                     li.className = 'px-4 py-3 text-sm font-medium text-slate-700 hover:bg-indigo-50 cursor-pointer border-b border-slate-100 last:border-0 flex justify-between items-center';
-                    li.innerHTML = `<span>${item.item_name}</span> <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Stok: ${item.stock}</span>`;
+                    li.innerHTML = `<span>${item.item_name}</span> <span class="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Stock: ${item.stock}</span>`;
                     li.onclick = () => { selectItemForTransaction(item); };
                     resultList.appendChild(li);
                 });
@@ -657,7 +657,7 @@
 
             // Isi Data UI
             document.getElementById('selectedItemName').innerText = item.item_name;
-            document.getElementById('selectedItemStatus').innerText = `Sisa Stok Saat Ini: ${item.stock}`;
+            document.getElementById('selectedItemStatus').innerText = `Current Stock: ${item.stock}`;
 
             // Set Hidden Form Identifier
             document.getElementById('submitIdentifier').value = item.id;
@@ -681,11 +681,10 @@
         }
 
         // Final Submit
-        // Final Submit
         function submitTransaction() {
             const qty = document.getElementById('transactionQty').value;
             if (!qty || qty < 1) {
-                Swal.fire('Oops!', 'Jumlah barang minimal 1', 'warning');
+                Swal.fire('Oops!', 'Minimum quantity is 1', 'warning');
                 return;
             }
 
@@ -706,7 +705,7 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <h3 class="text-lg font-bold text-slate-800">Memproses Transaksi...</h3>
+                        <h3 class="text-lg font-bold text-slate-800">Processing Transaction...</h3>
                     </div>
                 `;
 

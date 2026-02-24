@@ -136,7 +136,7 @@
                                         </div>
                                         <div>
                                             <p class="text-sm font-medium text-slate-700">
-                                                {{ $log->user->name ?? 'System' }}
+                                                {{ $log->user->first_name ?? 'System' }}
                                             </p>
                                             <p class="text-[11px] text-slate-400">
                                                 {{ $log->user->role ?? 'System' }}
