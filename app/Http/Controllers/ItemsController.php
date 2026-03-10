@@ -3,188 +3,216 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
-use App\Models\Category; // Jangan lupa import ini untuk dropdown modal
-use Illuminate\Http\Request;
+use App\Models\Category;
 use App\Models\HistoryLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ItemsController extends Controller
 {
+    /**
+     * FUNGSI BANTUAN (HELPER)
+     * Untuk mencegah penulisan kode berulang di index() dan dashboard()
+     */
+    private function getInventoryStats($items)
+    {
+        return [
+            'totalItems'      => $items->sum('stock'),
+            'outOfStockCount' => $items->where('stock', 0)->count(),
+            'lowStockCount'   => $items->filter(fn($item) => $item->stock > 0 && $item->stock <= ($item->max_stock * 0.5))->count(),
+            'inStockCount'    => $items->filter(fn($item) => $item->stock > ($item->max_stock * 0.5))->count(),
+        ];
+    }
+
     public function index()
-{
-    $items = Item::with('category')->latest()->get();
-    $categories = Category::all();
+    {
+        $items = Item::with('category')->latest()->get();
+        $categories = Category::all();
+        $stats = $this->getInventoryStats($items); // Panggil fungsi helper
 
-    // Hitung Statistik
-    $totalItems = $items->sum('stock');
-    $lowStockCount = $items->where('stock', '<', 10)->where('stock', '>', 0)->count();
-    $outOfStockCount = $items->where('stock', 0)->count();
-    $inStockCount = $items->where('stock', '>', 0)->count();
+        return view('admin.crud.item.itemsManage', array_merge(compact('items', 'categories'), $stats));
+    }
 
-    return view('admin.crud.item.itemsManage', compact(
-        'items',
-        'categories',
-        'totalItems',
-        'lowStockCount',
-        'outOfStockCount',
-        'inStockCount'
-    ));
-}
-
-// Memuat halaman Dashboard
     public function dashboard()
     {
         $items = Item::with('category')->latest()->get();
         $totalCategories = Category::count();
+        $stats = $this->getInventoryStats($items); // Panggil fungsi helper
 
-        // Hitung Statistik
-        $totalItems = $items->sum('stock');
-        $lowStockCount = $items->where('stock', '<', 10)->where('stock', '>', 0)->count();
-        $outOfStockCount = $items->where('stock', 0)->count();
-        $inStockCount = $items->where('stock', '>', 0)->count();
-
-        // Mengarah ke view dashboard-admin
-        return view('admin.dashboard-admin', compact(
-            'items',
-            'totalCategories',
-            'totalItems',
-            'lowStockCount',
-            'outOfStockCount',
-            'inStockCount'
-        ));
+        return view('admin.dashboard-admin', array_merge(compact('items', 'totalCategories'), $stats));
     }
 
-    // Memproses form dari Scanner QR Code
     public function processTransaction(Request $request)
     {
         $request->validate([
             'identifier' => 'required',
-            'type' => 'required|in:take,add',
-            'qty' => 'required|integer|min:1'
+            'type'       => 'required|in:take,add,defect,resolve_defect',
+            'qty'        => 'required|integer|min:1',
+            'reject_qty' => 'nullable|integer|min:0',
+            'note'       => 'nullable|string|max:255'
         ]);
 
-        // Cari item berdasarkan ID (atau part_number jika Anda menggunakannya)
         $item = Item::find($request->identifier);
-        
+
         if (!$item) {
-            // Jika Anda menambahkan kolom part_number di database, nyalakan baris di bawah ini:
-            // $item = Item::where('part_number', $request->identifier)->first();
-            
-            if (!$item) {
-                return redirect()->back()->with('error', 'Barang tidak ditemukan!');
-            }
+            return redirect()->back()->with('error', 'Barang tidak ditemukan!');
         }
 
         $qty = $request->qty;
+        $rejectQty = $request->reject_qty ?? 0;
+        $userNote = $request->note;
+
+        // Base parameter untuk HistoryLog agar tidak ditulis berulang
+        $logData = [
+            'user_id'     => Auth::id(),
+            'item_id'     => $item->id,
+            'category_id' => $item->category_id,
+            'units'       => $item->units, // FIX: Menambahkan units agar konsisten
+        ];
 
         if ($request->type === 'take') {
-            if ($item->stock < $qty) {
-                return redirect()->back()->with('error', 'Stok tidak mencukupi untuk diambil!');
+            if ($item->stock < $qty) return redirect()->back()->with('error', 'Stok tidak mencukupi!');
+            
+            $item->decrement('stock', $qty); // Cara lebih ringkas dari $item->stock -= $qty;
+            
+            HistoryLog::create(array_merge($logData, [
+                'action'   => 'Usage',
+                'quantity' => -$qty,
+                'note'     => $userNote ?: 'Stock taken via Scanner',
+            ]));
+
+        } elseif ($request->type === 'add') {
+            $item->increment('stock', $qty);
+            $item->increment('damaged_stock', $rejectQty);
+
+            HistoryLog::create(array_merge($logData, [
+                'action'   => 'Restock',
+                'quantity' => $qty,
+                'note'     => $userNote ?: 'Good stock added',
+            ]));
+
+            if ($rejectQty > 0) {
+                HistoryLog::create(array_merge($logData, [
+                    'action'   => 'Rejected (QC)',
+                    'quantity' => $rejectQty,
+                    'note'     => 'Rejected from new batch. ' . $userNote,
+                ]));
             }
-            $item->stock -= $qty;
-            $action = 'Usage';
-            $note = 'Stock taken via QR Scanner';
-        } else {
-            $item->stock += $qty;
-            $action = 'Restock';
-            $note = 'Stock added via QR Scanner';
+
+        } elseif ($request->type === 'defect') {
+            if ($item->stock < $qty) return redirect()->back()->with('error', 'Stok bagus tidak mencukupi!');
+            
+            $item->decrement('stock', $qty);
+            $item->increment('damaged_stock', $qty);
+
+            HistoryLog::create(array_merge($logData, [
+                'action'   => 'Mark Defect',
+                'quantity' => -$qty,
+                'note'     => $userNote ?: 'Moved to damaged stock',
+            ]));
+
+        } elseif ($request->type === 'resolve_defect') {
+            if ($item->damaged_stock < $qty) return redirect()->back()->with('error', 'Stok rusak tidak mencukupi!');
+            
+            $item->decrement('damaged_stock', $qty);
+
+            HistoryLog::create(array_merge($logData, [
+                'action'   => 'Resolve Defect',
+                'quantity' => -$qty,
+                'note'     => $userNote ?: 'Damaged stock resolved',
+            ]));
         }
 
-        $item->save();
-
-        // Catat ke HistoryLog
-        HistoryLog::create([
-            'user_id' => Auth::id(),
-            'item_id' => $item->id,
-            'category_id' => $item->category_id,
-            'action' => $action,
-            'quantity' => ($request->type === 'take' ? -$qty : $qty), // Negatif jika diambil
-            'note' => $note,
-        ]);
-
-        return redirect()->back()->with('success', "Transaksi berhasil! Stok {$item->item_name} telah diperbarui.");
+        return redirect()->back()->with('success', "Transaksi berhasil diproses!");
     }
-
 
     public function store(Request $request)
     {
-        $request->validate([
-            'item_name' => 'required|string|max:255',
-            // Validasi ID, pastikan id-nya ada di tabel categories
+        $validated = $request->validate([
+            'item_name'   => 'required|string|max:255',
+            'part_number' => 'nullable|string|max:255|unique:items,part_number',
             'category_id' => 'required|exists:categories,id',
-            'stock' => 'required|integer|min:0',
+            'stock'       => 'required|integer|min:0',
+            'units'       => 'required|string|max:50',
+            'max_stock'   => 'required|integer|min:0',
         ]);
 
-        $item = Item::create($request->all());
+        $item = Item::create($validated); // FIX: Gunakan $validated bukan $request->all()
 
         HistoryLog::create([
-        'user_id' => Auth::id(),
-        'item_id' => $item->id,
-        'category_id' => $item->category_id,
-        'action' => 'Create',
-        'quantity' => $item->stock,
-        'note' => 'New item created',
-    ]);
+            'user_id'     => Auth::id(),
+            'item_id'     => $item->id,
+            'category_id' => $item->category_id,
+            'action'      => 'Create',
+            'units'       => $item->units,
+            'quantity'    => $item->stock,
+            'note'        => 'New item created',
+        ]);
 
-        return redirect()->back()->with('success', 'Item created successfully!'); // ... (Kode store simpan data yang sudah Anda buat) ...
+        return redirect()->back()->with('success', 'Item created successfully!');
     }
 
     public function update(Request $request, $id)
-{
-    $item = Item::findOrFail($id);
+    {
+        $item = Item::findOrFail($id);
+        $oldStock = $item->stock;
 
-    $oldStock = $item->stock;
-
-    $request->validate([
-        'item_name' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id',
-        'stock' => 'required|integer|min:0',
-    ]);
-
-    $item->update($request->all());
-
-    $newStock = $item->stock;
-    $diff = $newStock - $oldStock;
-
-    if ($diff != 0) {
-        HistoryLog::create([
-            'user_id' => Auth::id(),
-            'item_id' => $item->id,
-            'category_id' => $item->category_id,
-            'action' => $diff > 0 ? 'Restock' : 'Usage',
-            'quantity' => $diff,
-            'note' => 'Stock updated via edit',
+        $validated = $request->validate([
+            'item_name'   => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'stock'       => 'required|integer|min:0',
+            'max_stock'   => 'required|integer|min:0',
+            'units'       => 'required|string|max:50',
+            // Pastikan part_number dan description juga divalidasi jika ada di form
+            'part_number' => 'nullable|string|max:255|unique:items,part_number,' . $id,
+            'description' => 'nullable|string'
         ]);
-    } else {
-        HistoryLog::create([
-            'user_id' => Auth::id(),
-            'item_id' => $item->id,
+
+        $item->update($validated); // FIX: Gunakan $validated bukan $request->all()
+
+        $diff = $item->stock - $oldStock;
+
+        // Base history log
+        $logData = [
+            'user_id'     => Auth::id(),
+            'item_id'     => $item->id,
             'category_id' => $item->category_id,
-            'action' => 'Update',
-            'quantity' => 0,
-            'note' => 'Item updated (no stock change)',
-        ]);
+            'units'       => $item->units,
+        ];
+
+        if ($diff != 0) {
+            HistoryLog::create(array_merge($logData, [
+                'action'   => $diff > 0 ? 'Restock' : 'Usage',
+                'quantity' => $diff,
+                'note'     => 'Stock updated via edit',
+            ]));
+        } else {
+            HistoryLog::create(array_merge($logData, [
+                'action'   => 'Update',
+                'quantity' => 0,
+                'note'     => 'Item updated (no stock change)',
+            ]));
+        }
+
+        return redirect()->back()->with('success', 'Item updated successfully!');
     }
 
-    return redirect()->back()->with('success', 'Item updated successfully!');
-}
-
     public function destroy($id)
-{
-    $item = Item::findOrFail($id);
+    {
+        $item = Item::findOrFail($id);
 
-    HistoryLog::create([
-        'user_id' => Auth::id(),
-        'item_id' => $item->id,
-        'category_id' => $item->category_id,
-        'action' => 'Delete',
-        'quantity' => 0,
-        'note' => 'Item deleted',
-    ]);
+        HistoryLog::create([
+            'user_id'     => Auth::id(),
+            'item_id'     => $item->id,
+            'category_id' => $item->category_id,
+            'action'      => 'Delete',
+            'quantity'    => 0,
+            'units'       => $item->units,
+            'note'        => 'Item deleted',
+        ]);
 
-    $item->delete();
+        $item->delete();
 
-    return redirect()->back()->with('success', 'Item deleted successfully!');
-}
-
+        return redirect()->back()->with('success', 'Item deleted successfully!');
+    }
 }

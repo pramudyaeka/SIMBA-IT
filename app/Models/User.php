@@ -26,6 +26,7 @@ class User extends Authenticatable
         'role',
         'status',
         'password',
+        'access_level', // PENTING: Pastikan ini ada di fillable agar bisa diisi saat registrasi atau update user
 
     ];
 

@@ -12,8 +12,11 @@ class Item extends Model
     protected $fillable = [
         'item_name',
         'part_number',
-        'category_id', // PENTING: Gunakan category_id, bukan category
+        'category_id',
         'stock',
+        'units',
+        'max_stock',
+        'damaged_stock',
         'description',
         'status',
     ];

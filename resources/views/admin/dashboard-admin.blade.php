@@ -311,7 +311,7 @@
                                     class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm font-medium">
 
                                 <ul id="searchResultList"
-                                    class="absolute z-20 w-full bg-white border border-slate-200 rounded-lg shadow-lg mt-1 max-h-48 overflow-y-auto hidden">
+                                    class="w-full bg-white border border-slate-200 rounded-lg shadow-sm mt-2 max-h-60 overflow-y-auto hidden mb-3">
                                 </ul>
                             </div>
 
@@ -339,7 +339,12 @@
                                 <input type="number" id="transactionQty" value="1" min="1"
                                     class="w-full px-4 py-2.5 text-center text-xl rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-bold text-slate-800">
                             </div>
-
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1.5">Reference / Note</label>
+                                <textarea id="transactionNote" rows="2"
+                                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm text-slate-700 resize-none"
+                                    placeholder="e.g. Project Alpha, Restock Vendor A..."></textarea>
+                            </div>
                             <div class="flex gap-3 pt-2">
                                 <button type="button" onclick="backToStep1()"
                                     class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">Change
@@ -356,6 +361,7 @@
                         <input type="hidden" name="type" id="submitType" value="take">
                         <input type="hidden" name="qty" id="submitQty">
                         <input type="hidden" name="identifier" id="submitIdentifier">
+                        <input type="hidden" name="note" id="submitNote">
                     </form>
 
                 </div>
@@ -680,9 +686,12 @@
             }
         }
 
-        // Final Submit
+       // Final Submit
         function submitTransaction() {
             const qty = document.getElementById('transactionQty').value;
+            // Ambil value note
+            const note = document.getElementById('transactionNote').value; 
+
             if (!qty || qty < 1) {
                 Swal.fire('Oops!', 'Minimum quantity is 1', 'warning');
                 return;
@@ -691,6 +700,9 @@
             // 1. Isi data ke dalam form tersembunyi
             document.getElementById('submitType').value = currentTransactionType;
             document.getElementById('submitQty').value = qty;
+            
+            // Masukkan note ke hidden input form
+            document.getElementById('submitNote').value = note; 
 
             // 2. AMBIL FORM SEBELUM TAMPILAN DIHAPUS
             const form = document.getElementById('scanActionForm');
