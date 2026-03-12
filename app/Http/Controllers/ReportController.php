@@ -2,43 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item; // Pastikan ini mengarah ke model barang Anda
+use App\Models\Item;
 use Illuminate\Http\Request;
+use App\Exports\InventoryExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. Ambil input periode (Y-m), default ke bulan ini jika kosong
+        // 1. Ambil periode dari input, jika kosong gunakan bulan ini
         $period = $request->input('period', Carbon::now()->format('Y-m'));
+        
+        // Pecah periode (contoh: '2024-05') menjadi Tahun dan Bulan
+        $parsedDate = Carbon::createFromFormat('Y-m', $period);
 
-        // Pisahkan tahun dan bulan dari input
-        [$year, $month] = explode('-', $period);
-
-        // 2. Tarik data dari database (Contoh filter berdasarkan updated_at)
-        // Sesuaikan nama field 'category' dan 'status' dengan yang ada di tabel Anda
-        // 2. Tarik data dari database (Gunakan Eager Loading 'with')
-        $reportData = Item::with('category') // <-- TAMBAHKAN INI
-            ->whereYear('updated_at', $year)
-            ->whereMonth('updated_at', $month)
-            ->orderBy('updated_at', 'desc')
+        // 2. Ambil data barang yang HANYA di-update pada bulan & tahun yang dipilih
+        $reportData = Item::with('category')
+            ->whereYear('updated_at', $parsedDate->year)
+            ->whereMonth('updated_at', $parsedDate->month)
+            ->orderBy('item_name', 'asc')
             ->get();
 
-        // 3. Hitung Statistik
-        $totalItems = $reportData->count();
-        $totalStock = $reportData->sum('stock'); // Pastikan 'stock' adalah nama kolom di database
-        $lowStockItems = $reportData->where('stock', '<', 10)->where('stock', '>', 0)->count();
-        $outOfStockItems = $reportData->where('stock', 0)->count();
+        // 3. Kalkulasi Statistik berdasarkan data yang difilter
+        $totalStock      = $reportData->sum('stock');
+        $totalItems      = $reportData->count();
+        $outOfStockItems = $reportData->where('stock', '<=', 0)->count();
+        $lowStockItems   = $reportData->where('stock', '>', 0)->where('stock', '<', 10)->count();
 
-        // 4. Kirim data ke view
+        // Ganti 'admin.reports' dengan path file view Anda (misal: 'admin.reports.index' jika di dalam folder)
         return view('admin.reports', compact(
-            'reportData',
-            'totalItems',
-            'totalStock',
-            'lowStockItems',
-            'outOfStockItems',
-            'period' // Kirim kembali periode untuk value input type="month"
+            'period', 'reportData', 'totalStock', 'totalItems', 'lowStockItems', 'outOfStockItems'
         ));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $period = $request->input('period', Carbon::now()->format('Y-m'));
+        $fileName = 'Inventory_Report_' . $period . '.xlsx';
+
+        return Excel::download(new InventoryExport($period), $fileName);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $period = $request->input('period', Carbon::now()->format('Y-m'));
+        $parsedDate = Carbon::createFromFormat('Y-m', $period);
+        $formattedMonth = $parsedDate->format('F Y');
+
+        // Filter data untuk PDF sama seperti di view
+        $items = Item::with('category')
+            ->whereYear('updated_at', $parsedDate->year)
+            ->whereMonth('updated_at', $parsedDate->month)
+            ->orderBy('item_name', 'asc')
+            ->get();
+
+        // Render view PDF
+        $pdf = Pdf::loadView('admin.pdf-report', compact('items', 'formattedMonth'));
+        
+        return $pdf->download('Inventory_Report_' . $period . '.pdf');
     }
 }

@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
     Route::put('/items/{id}', [ItemsController::class, 'update'])->name('items.update');
     Route::delete('/items/{id}', [ItemsController::class, 'destroy'])->name('items.destroy');
-    
+
     // Rute untuk memproses hasil scan QR
     Route::post('/items/transaction', [ItemsController::class, 'processTransaction'])->name('items.transaction');
 
@@ -85,6 +85,8 @@ Route::middleware('auth')->group(function () {
     // <-- DIPERBAIKI: Mengarah ke ReportController dan namanya diubah menjadi reports.index
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.page');
 
+    Route::get('/export-excel', [ReportController::class, 'exportExcel'])->name('reports.excel');
+    Route::get('/export-pdf', [ReportController::class, 'exportPdf'])->name('reports.pdf');
     /*
     |--------------------------------------------------------------------------
     | ACCOUNT MANAGEMENT (USER CRUD)
@@ -94,5 +96,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-
 });

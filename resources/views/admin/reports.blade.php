@@ -85,13 +85,13 @@
                 </div>
 
                 <div class="flex gap-2 w-full sm:w-auto">
-                    <a href="{{ url('/admin/export-excel?period='.$period) }}" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-200 transition-all duration-200 group">
+                    <a href="{{ route('reports.excel', ['period' => $period]) }}" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-emerald-200 transition-all duration-200 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                         </svg>
                         <span>Excel</span>
                     </a>
-                    <a href="{{ url('/admin/export-pdf?period='.$period) }}" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-rose-200 transition-all duration-200 group">
+                    <a href="{{ route('reports.pdf', ['period' => $period]) }}" class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-xl shadow-md shadow-rose-200 transition-all duration-200 group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-4 group-hover:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                         </svg>
@@ -175,4 +175,42 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function () {
+                    const filter = this.value.toLowerCase();
+                    // Sesuaikan dengan class baris tabel Anda
+                    const rows = document.querySelectorAll('tbody tr.group'); 
+                    
+                    let visibleCount = 0;
+                    let rowNumber = 1;
+                    
+                    rows.forEach(row => {
+                        // Ambil text dari kolom Nama Barang (index 1) dan Kategori (index 2)
+                        const itemName = row.cells[1].textContent.toLowerCase();
+                        const category = row.cells[2].textContent.toLowerCase();
+
+                        if (itemName.includes(filter) || category.includes(filter)) {
+                            row.style.display = '';
+                            row.cells[0].innerText = rowNumber++; // Update nomor urut
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    // Jika Anda memiliki div "noDataMessage", ini akan menampilkannya jika hasil 0
+                    // (Opsional, jika di kode Anda tidak ada id="noDataMessage", abaikan saja bagian ini)
+                    const noDataMsg = document.getElementById('noDataMessage');
+                    if (noDataMsg) {
+                        if (visibleCount === 0) noDataMsg.classList.remove('hidden');
+                        else noDataMsg.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
 @endsection
