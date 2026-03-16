@@ -35,7 +35,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'role' => 'required|string',
-            'position' => 'nullable|string',
+            'access_level' => 'nullable|string',
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
             'password' => 'required|string|min:8',
@@ -70,7 +70,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'role' => 'required|string',
-            'position' => 'nullable|string',
+            'access_level' => 'nullable|string',
             'phone' => 'nullable|string',
             'address' => 'nullable|string',
             'password' => 'nullable|string|min:8', // Password nullable saat edit
@@ -93,7 +93,7 @@ class UserController extends Controller
         // Kita bisa buat note yang detail
         $changes = [];
         if ($oldRole !== $user->role) $changes[] = "Role changed to {$user->role}";
-        if ($oldPosition !== $user->position) $changes[] = "Position changed to {$user->position}";
+        if ($oldPosition !== $user->access_level) $changes[] = "Access level changed to {$user->access_level}";
 
         $note = "Updated details for: {$user->first_name}. " . implode(', ', $changes);
 

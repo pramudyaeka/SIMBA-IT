@@ -149,7 +149,7 @@
                                             '{{ addslashes($user->last_name) }}', 
                                             '{{ $user->email }}', 
                                             '{{ $user->role }}', 
-                                            '{{ addslashes($user->position) }}', 
+                                            '{{ addslashes($user->access_level) }}', 
                                             '{{ $user->phone }}', 
                                             '{{ addslashes($user->address) }}'
                                         )" 
