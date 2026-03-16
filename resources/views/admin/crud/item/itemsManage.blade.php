@@ -23,26 +23,32 @@
         {{-- Stats Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             {{-- In Stock --}}
-            <div id="card-in" onclick="filterTable('in')" class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all relative overflow-hidden">
+            <div id="card-in" onclick="filterTable('in')"
+                class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all relative overflow-hidden">
                 <div class="flex justify-between items-start relative z-10">
                     <div>
                         <p class="text-sm font-medium text-slate-500">In Stock</p>
                         <div class="flex items-baseline gap-2 mt-2">
                             <h3 class="text-3xl font-bold text-slate-800">{{ $inStockCount }}</h3>
-                            <span class="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Items</span>
+                            <span
+                                class="text-sm font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Items</span>
                         </div>
                     </div>
                     <div class="p-3 bg-emerald-50 text-emerald-600 rounded-2xl group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                     </div>
                 </div>
-                <p class="text-xs text-emerald-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click to filter</p>
+                <p class="text-xs text-emerald-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Click to filter</p>
             </div>
 
             {{-- Restock --}}
-            <div id="card-restock" onclick="filterTable('restock')" class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all relative overflow-hidden">
+            <div id="card-restock" onclick="filterTable('restock')"
+                class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all relative overflow-hidden">
                 <div class="flex justify-between items-start relative z-10">
                     <div>
                         <p class="text-sm font-medium text-slate-500">Need Restock</p>
@@ -52,16 +58,20 @@
                         </div>
                     </div>
                     <div class="p-3 bg-amber-50 text-amber-600 rounded-2xl group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                     </div>
                 </div>
-                <p class="text-xs text-amber-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click to filter</p>
+                <p class="text-xs text-amber-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Click to filter</p>
             </div>
 
             {{-- Out of Stock --}}
-            <div id="card-out" onclick="filterTable('out')" class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all relative overflow-hidden">
+            <div id="card-out" onclick="filterTable('out')"
+                class="group cursor-pointer p-6 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all relative overflow-hidden">
                 <div class="flex justify-between items-start relative z-10">
                     <div>
                         <p class="text-sm font-medium text-slate-500">Out of Stock</p>
@@ -71,23 +81,29 @@
                         </div>
                     </div>
                     <div class="p-3 bg-rose-50 text-rose-600 rounded-2xl group-hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                         </svg>
                     </div>
                 </div>
-                <p class="text-xs text-rose-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click to filter</p>
+                <p class="text-xs text-rose-600 mt-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click
+                    to filter</p>
             </div>
         </div>
 
         {{-- Toolbar Section --}}
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="flex items-center gap-3 h-10">
-                <span id="filter-badge" class="hidden px-3 py-1.5 rounded-full bg-slate-800 text-white text-xs font-bold items-center gap-2 shadow-sm animate-pulse transition-all">
+                <span id="filter-badge"
+                    class="hidden px-3 py-1.5 rounded-full bg-slate-800 text-white text-xs font-bold items-center gap-2 shadow-sm animate-pulse transition-all">
                     <span id="filter-text">Filtered</span>
                     <button type="button" onclick="filterTable('reset')" class="hover:text-slate-300 focus:outline-none">
                         <svg class="size-3" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
                         </svg>
                     </button>
                 </span>
@@ -96,27 +112,39 @@
             <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                 <div class="relative w-full md:w-64">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-400" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <input type="text" id="searchInput" class="block w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm placeholder-slate-400" placeholder="Search item...">
+                    <input type="text" id="searchInput"
+                        class="block w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm placeholder-slate-400"
+                        placeholder="Search item...">
                 </div>
 
-                <div class="flex gap-2">
-                    <button type="button" onclick="openAddStockModal()" class="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-indigo-600 text-sm font-semibold rounded-xl shadow-sm transition-all duration-200 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="hidden sm:inline">Add Stock</span>
-                    </button>
-                    <button type="button" onclick="toggleModal('addItemModal')" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
-                        Add Item
-                    </button>
-                </div>
+                @if (auth()->user()->access_level === 'admin')
+                    <div class="flex gap-2">
+                        <button type="button" onclick="openAddStockModal()"
+                            class="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-indigo-600 text-sm font-semibold rounded-xl shadow-sm transition-all duration-200 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <span class="hidden sm:inline">Add Stock</span>
+                        </button>
+                        <button type="button" onclick="toggleModal('addItemModal')"
+                            class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-sm font-semibold rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 transition-all duration-200 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Add Item
+                        </button>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -125,32 +153,45 @@
             <div class="overflow-x-auto">
                 <table id="dataTable" class="min-w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/80 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-100">
+                        <tr
+                            class="bg-slate-50/80 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-100">
                             <th class="px-6 py-4 text-center w-16">No</th>
-                            <th onclick="sortTable(1)" class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none">
+                            <th onclick="sortTable(1)"
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none">
                                 <div class="flex items-center gap-2">Item Name
-                                    <svg id="icon-1" class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg id="icon-1"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                             </th>
-                            <th onclick="sortTable(2)" class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
+                            <th onclick="sortTable(2)"
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
                                 <div class="flex items-center justify-center gap-2">Category
-                                    <svg id="icon-2" class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg id="icon-2"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                             </th>
-                            <th onclick="sortTable(3)" class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
+                            <th onclick="sortTable(3)"
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
                                 <div class="flex items-center justify-center gap-2">Status
-                                    <svg id="icon-3" class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg id="icon-3"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                             </th>
-                            <th onclick="sortTable(4)" class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
+                            <th onclick="sortTable(4)"
+                                class="px-6 py-4 cursor-pointer group hover:bg-slate-100 transition-colors select-none text-center">
                                 <div class="flex items-center justify-center gap-2">Stock
-                                    <svg id="icon-4" class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <svg id="icon-4"
+                                        class="size-3 text-slate-300 group-hover:text-indigo-500 transition-transform"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
@@ -160,16 +201,19 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach ($items as $item)
-                            <tr class="item-row group hover:bg-indigo-50/30 transition-colors duration-200" data-stock="{{ $item->stock }}" data-max="{{ $item->max_stock }}">
+                            <tr class="item-row group hover:bg-indigo-50/30 transition-colors duration-200"
+                                data-stock="{{ $item->stock }}" data-max="{{ $item->max_stock }}">
                                 <td class="px-6 py-4 text-sm text-slate-400 text-center font-medium">{{ $loop->iteration }}</td>
-                                <td class="px-6 py-4 text-sm font-medium text-slate-700 group-hover:text-indigo-700 transition-colors">
+                                <td
+                                    class="px-6 py-4 text-sm font-medium text-slate-700 group-hover:text-indigo-700 transition-colors">
                                     {{ $item->item_name }}
                                     @if($item->part_number)
                                         <div class="text-[10px] text-slate-400 font-mono mt-0.5">{{ $item->part_number }}</div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
                                         {{ $item->category->category_name ?? 'Uncategorized' }}
                                     </span>
                                 </td>
@@ -187,61 +231,92 @@
                                             $status = 'Low Stock';
                                         }
                                     @endphp
-                                    <span class="inline-flex items-center w-28 justify-center py-1 rounded-full text-xs font-semibold border ring-1 ring-inset {{ $badge }}">
+                                    <span
+                                        class="inline-flex items-center w-28 justify-center py-1 rounded-full text-xs font-semibold border ring-1 ring-inset {{ $badge }}">
                                         <span class="mr-1.5 size-1.5 rounded-full bg-current"></span>{{ $status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <div class="text-sm text-slate-700 font-bold">{{ $item->stock }} <span class="font-normal text-xs text-slate-400">{{ $item->units ?? 'pcs' }}</span></div>
+                                    <div class="text-sm text-slate-700 font-bold">{{ $item->stock }} <span
+                                            class="font-normal text-xs text-slate-400">{{ $item->units ?? 'pcs' }}</span></div>
                                     @if($item->damaged_stock > 0)
-                                        <div class="text-[10px] text-rose-500 font-semibold mt-1 bg-rose-50 rounded px-1.5 py-0.5 inline-block">
+                                        <div
+                                            class="text-[10px] text-rose-500 font-semibold mt-1 bg-rose-50 rounded px-1.5 py-0.5 inline-block">
                                             {{ $item->damaged_stock }} Defect
                                         </div>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-2">
-                                        {{-- Edit Button (FIXED PARAMETER $item->units) --}}
-                                        <button type="button" onclick="openEditModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}', '{{ $item->part_number }}', '{{ $item->stock }}', '{{ $item->max_stock }}', '{{ $item->category_id }}', '{{ $item->units ?? 'pcs' }}', `{{ $item->description }}`)"
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all shadow-sm" title="Edit Item">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                        </button>
-                                        
-                                        {{-- Delete Button --}}
-                                        <button type="button" onclick="openDeleteModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}')"
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all shadow-sm" title="Delete Item">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                        
-                                        {{-- QR Code Button --}}
-                                        <button type="button" onclick="openQrModal('{{ addslashes($item->item_name) }}', '{{ $item->part_number ?? $item->id }}')"
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-all shadow-sm" title="Show QR Code">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                                            </svg>
-                                        </button>
-                                        
-                                        {{-- Defect Button --}}
-                                        <button type="button" onclick="openDefectModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}', '{{ $item->stock }}')"
-                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 rounded-lg transition-all shadow-sm" title="Mark as Defect">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                            </svg>
-                                        </button>
-                                        
-                                        {{-- Resolve Defect Button --}}
-                                        @if($item->damaged_stock > 0)
-                                            <button type="button" onclick="openResolveModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}', '{{ $item->damaged_stock }}')"
-                                                class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 rounded-lg transition-all shadow-sm" title="Resolve Defect (Retur/Buang)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+                                        {{-- HANYA ADMIN YANG BISA EDIT & DELETE --}}
+                                        @if (auth()->check() && auth()->user()->access_level === 'admin')
+                                            {{-- Edit Button --}}
+                                            <button type="button"
+                                                onclick="openEditModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}', '{{ $item->part_number }}', '{{ $item->stock }}', '{{ $item->max_stock }}', '{{ $item->category_id }}', '{{ $item->units ?? 'pcs' }}', `{{ $item->description }}`)"
+                                                class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-all shadow-sm"
+                                                title="Edit Item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                            </button>
+
+                                            {{-- Delete Button --}}
+                                            <button type="button"
+                                                onclick="openDeleteModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}')"
+                                                class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-all shadow-sm"
+                                                title="Delete Item">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
                                             </button>
                                         @endif
+
+                                        {{-- QR CODE BISA DILIHAT SEMUA (ADMIN & STAFF) --}}
+                                        <button type="button"
+                                            onclick="openQrModal('{{ addslashes($item->item_name) }}', '{{ $item->part_number ?? $item->id }}')"
+                                            class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-all shadow-sm"
+                                            title="Show QR Code">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                                            </svg>
+                                        </button>
+
+                                        {{-- HANYA ADMIN YANG BISA DEFECT & RESOLVE --}}
+                                        @if (auth()->check() && auth()->user()->access_level === 'admin')
+                                            {{-- Defect Button --}}
+                                            <button type="button"
+                                                onclick="openDefectModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}', '{{ $item->stock }}')"
+                                                class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 rounded-lg transition-all shadow-sm"
+                                                title="Mark as Defect">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                                </svg>
+                                            </button>
+
+                                            {{-- Resolve Defect Button --}}
+                                            @if($item->damaged_stock > 0)
+                                                <button type="button"
+                                                    onclick="openResolveModal('{{ $item->id }}', '{{ addslashes($item->item_name) }}', '{{ $item->damaged_stock }}')"
+                                                    class="p-2 bg-white border border-slate-200 text-slate-500 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-200 rounded-lg transition-all shadow-sm"
+                                                    title="Resolve Defect (Retur/Buang)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </button>
+                                            @endif
+                                        @endif
+
                                     </div>
                                 </td>
                             </tr>
@@ -251,10 +326,13 @@
             </div>
 
             {{-- Empty State --}}
-            <div id="noDataMessage" class="{{ count($items) > 0 ? 'hidden' : '' }} flex flex-col items-center justify-center py-16 text-center">
+            <div id="noDataMessage"
+                class="{{ count($items) > 0 ? 'hidden' : '' }} flex flex-col items-center justify-center py-16 text-center">
                 <div class="p-4 bg-slate-50 rounded-full mb-3 ring-8 ring-slate-50/50">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
                 <h3 class="text-slate-900 font-semibold text-lg">No items found</h3>
@@ -265,7 +343,7 @@
 
     {{-- MODAL SECTION --}}
     @include('admin.crud.partials.modals')
-   
+
     {{-- Alerts & Validation Errors Check --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -274,12 +352,12 @@
                 @foreach ($errors->all() as $error)
                     errorMessages += '<li>{{ $error }}</li>';
                 @endforeach
-                
-                Swal.fire({ 
-                    icon: 'error', 
-                    title: 'Validation Error!', 
-                    html: `<ul class="text-left text-sm text-rose-500 list-disc ml-5">${errorMessages}</ul>`, 
-                    confirmButtonColor: '#e11d48' 
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error!',
+                    html: `<ul class="text-left text-sm text-rose-500 list-disc ml-5">${errorMessages}</ul>`,
+                    confirmButtonColor: '#e11d48'
                 });
             @endif
 
@@ -290,7 +368,7 @@
             @if(session('error'))
                 Swal.fire({ icon: 'error', title: 'Failed!', text: "{{ session('error') }}", confirmButtonColor: '#e11d48' });
             @endif
-        });
+                    });
     </script>
 
     {{-- Scripts --}}
@@ -439,13 +517,13 @@
             document.getElementById("edit_stock").value = stock;
             document.getElementById("edit_max_stock").value = max_stock;
             document.getElementById("edit_category_id").value = category_id;
-            
+
             // Set Unit Value
             const unitSelect = document.getElementById("edit_units");
             if (units && units !== 'null' && units !== '') {
                 unitSelect.value = units;
             } else {
-                unitSelect.value = 'pcs'; 
+                unitSelect.value = 'pcs';
             }
 
             document.getElementById("edit_description").value = description;
@@ -483,8 +561,8 @@
             document.getElementById('resolve_item_id').value = id;
             document.getElementById('resolve_item_name').innerText = name;
             document.getElementById('resolve_max_stock').innerText = damagedStock;
-            document.getElementById('resolve_qty').max = damagedStock; 
-            document.getElementById('resolve_qty').value = damagedStock; 
+            document.getElementById('resolve_qty').max = damagedStock;
+            document.getElementById('resolve_qty').value = damagedStock;
             toggleModal('resolveModal', true);
         }
 

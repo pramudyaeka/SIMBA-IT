@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     // Lihat Daftar Item & Kategori
     Route::get('/items', [ItemsController::class, 'index'])->name('items.manage');
     Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.manage');
+    Route::post('/items/transaction', [ItemsController::class, 'processTransaction'])->name('items.transaction');
 
     // History Log (Filter Staff/Admin diatur di dalam HistoryController)
     Route::get('/history', [HistoryController::class, 'index'])->name('history.page');
@@ -75,7 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
         Route::put('/items/{id}', [ItemsController::class, 'update'])->name('items.update');
         Route::delete('/items/{id}', [ItemsController::class, 'destroy'])->name('items.destroy');
-        Route::post('/items/transaction', [ItemsController::class, 'processTransaction'])->name('items.transaction');
+        
 
         // --- CATEGORY MANAGEMENT (ACTIONS) ---
         Route::post('/categories', [CategoriesController::class, 'store'])->name('categories.store');
